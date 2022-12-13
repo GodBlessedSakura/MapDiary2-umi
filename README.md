@@ -1,0 +1,1 @@
+# MapDiary2-umi
