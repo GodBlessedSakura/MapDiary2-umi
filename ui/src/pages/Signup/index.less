@@ -1,0 +1,59 @@
+.background {
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  background: url('../../assets/bg5.jpg');
+  background-size: cover;
+  .main {
+    display: flex;
+    border: 1px solid rgba(0,0,0,.4);
+    box-shadow: 0.3px 0.3px 0.4px 0.4px hsl(0deg 40% 60% / 40%);
+    height: 80%;
+    margin-left: 10%;
+    margin-top: 5%;
+    width: 80%;
+    .logo {
+      height: 100%;
+      width: 60%;
+      background-image: url('../../assets/Diary.jpeg');
+      background-size: cover;
+    }
+    .form-wrapper {
+      position: relative;
+      flex: 1;
+      padding-top: 40px;
+      padding-left: 7%;
+      background-color: #fff;
+
+      h3 {
+        font-size: 25px;
+      }
+      .form {
+        width: 60%;
+        margin-top: 45px;
+        :global {
+          .ant-form-item-label>label {
+            margin-bottom: 0.4rem;
+            font-size: 16px;
+          }
+          .ant-form-item-control-input input {
+            border-radius: 15px;
+          }
+          .ant-form-item-control-input span {
+            border-radius: 15px;
+          }
+          .ant-btn {
+            width: 100%;
+            border-radius: 10px;
+          }
+        }
+      }
+    .bald {
+      font-size: 16px;
+      font-weight: 700;
+      color: #000000;
+    }
+    }
+  }
+
+}

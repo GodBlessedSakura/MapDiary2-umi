@@ -1,0 +1,25 @@
+{
+  "private": true,
+  "author": "Zhang Lin <1306562902@qq.com>",
+  "scripts": {
+    "dev": "umi dev",
+    "build": "umi build",
+    "postinstall": "umi setup",
+    "setup": "umi setup",
+    "start": "npm run dev",
+    "start-api": "cd ../api/env/Scripts && activate && cd ../.. && flask run --no-debugger"
+  },
+  "dependencies": {
+    "@ant-design/icons": "^4.8.0",
+    "antd": "^5.0.6",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "umi": "^4.0.36"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "typescript": "^4.1.2"
+  },
+  "proxy": "http://localhost:5000 "
+}

@@ -1,0 +1,8 @@
+/ui/node_modules
+/ui/.env.local
+/ui/.umirc.local.ts
+/ui/config/config.local.ts
+/ui/src/.umi
+/ui/src/.umi-production
+/ui/src/.umi-test
+/ui/dist

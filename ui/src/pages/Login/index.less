@@ -1,0 +1,41 @@
+.background {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background-image: url('../../assets/Diary.jpeg');
+  background-size: cover;
+  .login {
+    width: 800px;
+    height: 600px;
+    box-sizing: border-box;
+    padding-left: 168px;
+    border-radius: 30px;
+    background-color: #F1F3E7;
+    opacity: 0.97;
+    img {
+      height: 150px;
+      margin-top: 67px;
+      border-radius: 20px;
+    }
+    .form {
+      width: 453px;
+      margin-top: 30px;
+      :global {
+        .ant-input-affix-wrapper {
+          margin-top: 10px;
+        }
+      }
+      .bottom {
+        :global {
+          .ant-form-item-control-input-content {
+            display: flex;
+            justify-content: space-between;
+          }
+        }
+
+      }
+    }
+  }
+}
