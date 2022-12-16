@@ -13,7 +13,7 @@ const UAvatar = () => {
     {
       key: '1',
       label: (
-        <Link to="/settings">
+        <Link to="/settings/user">
           <Space>
             <SettingOutlined />
             账号设置
