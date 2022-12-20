@@ -1,21 +1,34 @@
 from flask_restful import Resource, reqparse
-from models import UserModel
+from models import UserModel, MarkerModel, ImageModel
 from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity, get_jwt
+from external import db
+from serialization import return_marker_data, return_user_data
 
 # 参数解析器
 # 添加参数解析逻辑，解析逻辑使用文档：https://flask-restful.readthedocs.io/en/latest/reqparse.html
-parser = reqparse.RequestParser()
-parser.add_argument('username',
-                    help='This field cannot be blank',
-                    required=True)
-parser.add_argument('password',
-                    help='This field cannot be blank',
-                    required=True)
+# parser = reqparse.RequestParser()
+# parser.add_argument('username',
+#                     help='This field cannot be blank',
+#                     required=True)
+# parser.add_argument('password',
+#                     help='This field cannot be blank',
+#                     required=True)
 
 
 class UserRegistration(Resource):
 
     def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('username',
+                            help='This field cannot be blank',
+                            required=True)
+        parser.add_argument('password',
+                            help='This field cannot be blank',
+                            required=True)
+        parser.add_argument('email',
+                            help='This field cannot be blank',
+                            required=True)
+
         data = parser.parse_args()
 
         if UserModel.find_by_username(data['username']):
@@ -24,6 +37,7 @@ class UserRegistration(Resource):
             }
 
         new_user = UserModel(username=data['username'],
+                             email=data['email'],
                              password=UserModel.generate_hash(
                                  data['password']))
         try:
@@ -32,7 +46,8 @@ class UserRegistration(Resource):
             access_token = create_access_token(identity=data['username'])
             refresh_token = create_refresh_token(identity=data['username'])
             return {
-                'message': 'User {} was created'.format(data['username']),
+                'id': new_user.id,
+                'user_name': new_user.username,
                 'access_token': access_token,
                 'refresh_token': refresh_token
             }
@@ -44,6 +59,14 @@ class UserRegistration(Resource):
 class UserLogin(Resource):
 
     def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('username',
+                            help='This field cannot be blank',
+                            required=True)
+        parser.add_argument('password',
+                            help='This field cannot be blank',
+                            required=True)
+
         data = parser.parse_args()
         current_user = UserModel.find_by_username(data['username'])
         if not current_user:
@@ -55,7 +78,8 @@ class UserLogin(Resource):
             access_token = create_access_token(identity=data['username'])
             refresh_token = create_refresh_token(identity=data['username'])
             return {
-                'message': 'Logged in as {}'.format(data['username']),
+                'id': current_user.id,
+                'user_name': current_user.username,
                 'access_token': access_token,
                 'refresh_token': refresh_token
             }
@@ -99,17 +123,112 @@ class TokenRefresh(Resource):
         return {'access_token': access_token}
 
 
-class AllUsers(Resource):
-
-    def get(self):
-        return {'message': 'List of users'}
-
-    def delete(self):
-        return UserModel.delete_all()
-
-
 class SecretResource(Resource):
     # 给一个接口的方法添加jwt验证的装饰器
     @jwt_required()
     def get(self):
         return {'answer': 42}
+
+
+# 业务接口
+class GetUserInfo(Resource):
+
+    def post(self):
+
+        parser = reqparse.RequestParser()
+        parser.add_argument('username',
+                            help='This field cannot be blank',
+                            required=True)
+        data = parser.parse_args()
+        cur_user = UserModel.find_by_username(data['username'])
+        if not cur_user:
+            return {
+                'message': 'User {} does not exist'.format(data['username'])
+            }, 400
+        try:
+            result = return_user_data(cur_user)
+            return result
+        except:
+            return {'message': 'Fail to return the markers list'}, 500
+
+
+#
+class AddMarker(Resource):
+
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('username',
+                            help='This field cannot be blank',
+                            required=True)
+        parser.add_argument('position',
+                            help='This field cannot be blank',
+                            required=True)
+        parser.add_argument('text',
+                            help='This field cannot be blank',
+                            required=True)
+        parser.add_argument('images',
+                            help='This field cannot be blank',
+                            required=False)
+
+        data = parser.parse_args()
+        cur_user = UserModel.find_by_username(data['username'])
+        if not cur_user:
+            return {
+                'message': 'User {} does not exist'.format(data['username'])
+            }, 400
+
+        try:
+            new_marker = MarkerModel(user=cur_user,
+                                     position=data['position'],
+                                     text=data['text'])
+
+            if data['images']:
+                for url in data['images']:
+                    img = ImageModel(url=url, marker=new_marker)
+            new_marker.save_to_db()
+            return {"id": new_marker.id}
+        except:
+            return {'message': 'Fail to add new marker'}, 500
+
+
+class RemoveMarker(Resource):
+
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('marker_id',
+                            help='This field cannot be blank',
+                            required=True)
+        data = parser.parse_args()
+
+        cur_marker = MarkerModel.find_by_marker_id(data['marker_id'])
+        if not cur_marker:
+            return {
+                'message': 'Marker {} does not exist'.format(data['marker_id'])
+            }, 400
+
+        try:
+            cur_marker.enable = False
+            db.session.commit()
+            return {'message': 'Marker has been successfully deleted!'}
+        except:
+            return {'message': 'Fail to delete the marker!'}, 500
+
+
+class GetAllUsers(Resource):
+
+    def post(self):
+        all_users = UserModel.return_all()
+        result = []
+        for user in all_users:
+            result.append(return_user_data(user))
+        return result
+
+
+class GetAllMarkers(Resource):
+
+    def post(self):
+        all_valid_markers = MarkerModel.return_all_valid()
+        result = []
+        for valid_marker in all_valid_markers:
+            result.append(return_marker_data(valid_marker))
+        return result

@@ -27,8 +27,13 @@ api.add_resource(resources.UserLogin, '/login')
 api.add_resource(resources.UserLogoutAccess, '/logout/access')
 api.add_resource(resources.UserLogoutRefresh, '/logout/refresh')
 api.add_resource(resources.TokenRefresh, '/token/refresh')
-api.add_resource(resources.AllUsers, '/users')
 api.add_resource(resources.SecretResource, '/secret')
+# 业务接口
+api.add_resource(resources.GetUserInfo, '/user/get_info')
+api.add_resource(resources.AddMarker, '/user/add_marker')
+api.add_resource(resources.RemoveMarker, '/user/remove_marker')
+api.add_resource(resources.GetAllUsers, '/users')
+api.add_resource(resources.GetAllMarkers, '/markers')
 
 
 @app.before_first_request
