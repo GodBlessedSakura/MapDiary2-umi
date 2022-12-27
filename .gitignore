@@ -6,3 +6,5 @@
 /ui/src/.umi-production
 /ui/src/.umi-test
 /ui/dist
+/api/__pycache__
+/api/instance

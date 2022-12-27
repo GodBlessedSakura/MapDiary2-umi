@@ -1,7 +1,7 @@
 import { Navigate } from 'umi'
 
 const withAuth = (Component) => () => {
-  const isLogin = true
+  const isLogin = localStorage.getItem('md2_user')
   if (isLogin) {
     return <Component />
   } else {

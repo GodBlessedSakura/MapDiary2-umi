@@ -7,11 +7,14 @@ import imgUrl from '@/assets/LoginLogo.JPG'
 
 export default function Login() {
   const [loginForm] = Form.useForm()
+  const handleLogIn = () => {
+    loginForm.validateFields().then(() => {})
+  }
   return (
     <div className={styles.background}>
       <div className={styles.login}>
         <img src={imgUrl} />
-        <Form className={styles.form} form={loginForm} layout="vertical">
+        <Form className={styles.form} form={loginForm} layout="vertical" onFinish={handleLogIn}>
           <Form.Item
             name="username"
             rules={[
@@ -37,7 +40,7 @@ export default function Login() {
             <Input.Password prefix={<LockOutlined />} autoComplete="off" placeholder="Password" />
           </Form.Item>
           <Form.Item>
-            <Button type="primary" style={{ width: '100%' }}>
+            <Button type="primary" style={{ width: '100%' }} htmlType="submit">
               Login
             </Button>
           </Form.Item>

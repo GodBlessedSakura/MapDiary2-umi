@@ -1,0 +1,34 @@
+.settings {
+  width: 100%;
+  height: 100%;
+  :global {
+    .ant-layout {
+      width: 100%;
+      height: 100%;
+    }
+
+  }
+  .header {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+    font-weight: 600;
+
+    .header-right {
+      display: flex;
+      justify-content: space-evenly;
+      a {
+        color: black;
+      }
+    }
+  }
+  .logo {
+    width: 100px;
+    height: 67.5px;
+    margin-left: 20px;
+    border-radius: 15px;
+    margin-top: 10px;
+    background-image: url('@/assets/Logo.JPG');
+    background-size: cover;
+  }
+}
