@@ -1,10 +1,31 @@
 import React from 'react'
+import { Link, history } from 'umi'
+import { Form, Input, Button, message } from 'antd'
+import request from '@/utils/request'
 import styles from './index.less'
-import { Link } from 'umi'
-import { Form, Input, Button } from 'antd'
 
 const Signup = () => {
   const [signupForm] = Form.useForm()
+
+  const handleSubmitForm = () => {
+    signupForm.validateFields().then((values) => {
+      const { username, email, password } = values
+      request
+        .post('/api/registration', {
+          data: {
+            username,
+            email,
+            password,
+          },
+        })
+        .then((response) => {
+          history.push('/')
+        })
+        .catch((error) => {
+          message.error(error)
+        })
+    })
+  }
 
   return (
     <div className={styles.background}>
@@ -12,7 +33,7 @@ const Signup = () => {
         <div className={styles.logo}></div>
         <div className={styles['form-wrapper']}>
           <h3>Register</h3>
-          <Form className={styles.form} form={signupForm} layout="vertical">
+          <Form className={styles.form} form={signupForm} layout="vertical" onFinish={handleSubmitForm}>
             <Form.Item
               name="username"
               label="Username"
@@ -79,7 +100,9 @@ const Signup = () => {
               <Input.Password autoComplete="off" placeholder="Please re-enter your password" />
             </Form.Item>
             <Form.Item>
-              <Button type="primary">Sign Up</Button>
+              <Button type="primary" htmlType="submit">
+                Sign Up
+              </Button>
             </Form.Item>
             <p>
               Already have an account?

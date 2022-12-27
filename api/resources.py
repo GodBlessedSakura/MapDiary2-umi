@@ -3,16 +3,22 @@ from models import UserModel, MarkerModel, ImageModel
 from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity, get_jwt
 from external import db
 from serialization import return_marker_data, return_user_data
-
-# 参数解析器
-# 添加参数解析逻辑，解析逻辑使用文档：https://flask-restful.readthedocs.io/en/latest/reqparse.html
-# parser = reqparse.RequestParser()
-# parser.add_argument('username',
-#                     help='This field cannot be blank',
-#                     required=True)
-# parser.add_argument('password',
-#                     help='This field cannot be blank',
-#                     required=True)
+'''
+参数解析器
+添加参数解析逻辑，解析逻辑使用文档：https://flask-restful.readthedocs.io/en/latest/reqparse.html
+parser = reqparse.RequestParser()
+parser.add_argument('username',
+                    help='This field cannot be blank',
+                    required=True)
+parser.add_argument('password',
+                    help='This field cannot be blank',
+                    required=True)
+'''
+'''
+Flask设置token过期时间默认值如下：
+JWT_ACCESS_TOKEN_EXPIRES 默认为 15 min
+JWT_REFRESH_TOKEN_EXPIRES 默认为 30 days
+'''
 
 
 class UserRegistration(Resource):
