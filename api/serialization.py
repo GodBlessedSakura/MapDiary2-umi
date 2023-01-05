@@ -6,11 +6,12 @@ def return_marker_data(marker):
         "id": marker.id,
         "position": marker.position,
         "text": marker.text,
+        "title": marker.title,
         "images": images,
     }
 
 
-def return_user_data(user):
+def return_user_data(user, access_token):
     marker_ls = []
     for marker in user.markers:
         marker_ls.append(return_marker_data(marker))
@@ -22,8 +23,10 @@ def return_user_data(user):
         "avatar": user.avatar,
         "isAdmin": user.is_admin,
         "displayUser": user.display_user,
-        "hideOtherUsers": user.hide_other_users,
+        "displayOtherUsers": user.display_other_users,
         "locale": user.locale,
         "markers": marker_ls
     }
+    if access_token:
+        result['access_token'] = access_token
     return result

@@ -1,9 +1,13 @@
 import React from 'react'
 import { UserOutlined, SettingOutlined, LogoutOutlined } from '@ant-design/icons'
-import { Avatar, Layout, Menu, theme, Space, Dropdown } from 'antd'
-import { Link, Outlet } from 'umi'
-const { Header, Content, Footer, Sider } = Layout
+import { Avatar, Layout, Menu, theme, Space, Dropdown, Button, Spin } from 'antd'
+import withAuth from '@/hocs/withAuth'
+import { Link, Outlet, history } from 'umi'
+import { clearTokens } from '@/utils/token'
+import UserContext from '@/context/user'
 import styles from './index.less'
+
+const { Header, Content, Footer, Sider } = Layout
 
 const UserSettings = () => {
   const {
@@ -22,78 +26,101 @@ const UserSettings = () => {
     },
   ]
   const logOut = () => {
-    console.log('退出登录')
+    clearTokens()
+    history.push('/login')
+  }
+
+  const getDefaultSelect = () => {
+    const url = location.pathname
+    if (url.includes('settings/user')) return '1'
+    if (url.includes('settings/privacy')) return '2'
   }
 
   return (
-    <div className={styles.settings}>
-      <Layout>
-        <Sider breakpoint="lg" theme="light">
-          <div className={styles.logo} />
-          <Menu theme="light" mode="inline" defaultSelectedKeys={['1']} items={menuItems} />
-        </Sider>
-        <Layout>
-          <Header
-            className={styles.header}
-            style={{
-              background: colorBgContainer,
-            }}
-          >
-            <div>账号设置</div>
-            <div className={styles['header-right']}>
-              <Space size={30}>
-                <div>
-                  <Link to="/">回到主页</Link>
-                </div>
-                <div>
-                  <Dropdown
-                    menu={{
-                      items: [
-                        {
-                          key: '1',
-                          label: (
-                            <div onClick={logOut}>
-                              <Space>
-                                <LogoutOutlined />
-                                退出登录
-                              </Space>
-                            </div>
-                          ),
-                        },
-                      ],
+    <UserContext.Consumer>
+      {([user]) =>
+        user ? (
+          <div className={styles.settings}>
+            <Layout>
+              <Sider breakpoint="lg" theme="light">
+                <Button
+                  type="link"
+                  onClick={() => {
+                    history.push('/')
+                  }}
+                >
+                  <div className={styles.logo} />
+                </Button>
+                <Menu theme="light" mode="inline" defaultSelectedKeys={getDefaultSelect()} items={menuItems} />
+              </Sider>
+              <Layout>
+                <Header
+                  className={styles.header}
+                  style={{
+                    background: colorBgContainer,
+                  }}
+                >
+                  <h2>账号设置</h2>
+                  <div className={styles['header-right']}>
+                    <Space size={30}>
+                      <div>
+                        <Link to="/">回到主页</Link>
+                      </div>
+                      <div>
+                        <Dropdown
+                          menu={{
+                            items: [
+                              {
+                                key: '1',
+                                label: (
+                                  <div onClick={logOut}>
+                                    <Space>
+                                      <LogoutOutlined />
+                                      退出登录
+                                    </Space>
+                                  </div>
+                                ),
+                              },
+                            ],
+                          }}
+                        >
+                          <Avatar src={user?.avatar} icon={<UserOutlined />} size={46} />
+                        </Dropdown>
+                      </div>
+                    </Space>
+                  </div>
+                </Header>
+                <Content
+                  style={{
+                    margin: '24px 16px 0',
+                  }}
+                >
+                  <div
+                    style={{
+                      padding: 24,
+                      height: '100%',
+                      overflow: 'auto',
+                      background: colorBgContainer,
                     }}
                   >
-                    <Avatar size={46} />
-                  </Dropdown>
-                </div>
-              </Space>
-            </div>
-          </Header>
-          <Content
-            style={{
-              margin: '24px 16px 0',
-            }}
-          >
-            <div
-              style={{
-                padding: 24,
-                height: '100%',
-                background: colorBgContainer,
-              }}
-            >
-              <Outlet />
-            </div>
-          </Content>
-          <Footer
-            style={{
-              textAlign: 'center',
-            }}
-          >
-            Copyright©SakuraFantasy 2022, All Rights Reserved
-          </Footer>
-        </Layout>
-      </Layout>
-    </div>
+                    <Outlet />
+                  </div>
+                </Content>
+                <Footer
+                  style={{
+                    textAlign: 'center',
+                  }}
+                >
+                  Copyright©SakuraFantasy 2022, All Rights Reserved
+                </Footer>
+              </Layout>
+            </Layout>
+          </div>
+        ) : (
+          <Spin size="large" />
+        )
+      }
+    </UserContext.Consumer>
   )
 }
-export default UserSettings
+export default withAuth(UserSettings)

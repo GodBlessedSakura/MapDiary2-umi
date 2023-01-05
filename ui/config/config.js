@@ -13,6 +13,7 @@ export default defineConfig({
       pathRewrite: { '^/api': '' }, // 将请求url里的ci去掉
     },
   },
+  // mfsu: false,
   mfsu: {
     shared: {
       react: {

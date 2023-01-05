@@ -30,6 +30,7 @@ api.add_resource(resources.TokenRefresh, '/token/refresh')
 api.add_resource(resources.SecretResource, '/secret')
 # 业务接口
 api.add_resource(resources.GetUserInfo, '/user/get_info')
+api.add_resource(resources.UpdateUserInfo, '/user/update_info')
 api.add_resource(resources.AddMarker, '/user/add_marker')
 api.add_resource(resources.RemoveMarker, '/user/remove_marker')
 api.add_resource(resources.GetAllUsers, '/users')

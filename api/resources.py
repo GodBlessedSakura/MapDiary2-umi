@@ -1,6 +1,6 @@
 from flask_restful import Resource, reqparse
 from models import UserModel, MarkerModel, ImageModel
-from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity, get_jwt
+from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity, get_jwt, decode_token
 from external import db
 from serialization import return_marker_data, return_user_data
 '''
@@ -38,9 +38,9 @@ class UserRegistration(Resource):
         data = parser.parse_args()
 
         if UserModel.find_by_username(data['username']):
-            return {
-                'message': 'User {} already exists'.format(data['username'])
-            }
+            return {'error': 'User {} already exists'.format(data['username'])}
+        if UserModel.find_by_email(data['email']):
+            return {'error': 'Email {} already exists'.format(data['email'])}
 
         new_user = UserModel(username=data['username'],
                              email=data['email'],
@@ -53,7 +53,7 @@ class UserRegistration(Resource):
             refresh_token = create_refresh_token(identity=data['username'])
             return {
                 'id': new_user.id,
-                'user_name': new_user.username,
+                'username': new_user.username,
                 'access_token': access_token,
                 'refresh_token': refresh_token
             }
@@ -78,19 +78,19 @@ class UserLogin(Resource):
         if not current_user:
             return {
                 'message': 'User {} doesn\'t exist'.format(data['username'])
-            }
+            }, 401
 
         if UserModel.verify_hash(data['password'], current_user.password):
             access_token = create_access_token(identity=data['username'])
             refresh_token = create_refresh_token(identity=data['username'])
             return {
                 'id': current_user.id,
-                'user_name': current_user.username,
+                'username': current_user.username,
                 'access_token': access_token,
                 'refresh_token': refresh_token
             }
         else:
-            return {'message': 'Wrong credentials'}
+            return {'message': 'Wrong credentials'}, 401
 
 
 class UserLogoutAccess(Resource):
@@ -139,23 +139,90 @@ class SecretResource(Resource):
 # 业务接口
 class GetUserInfo(Resource):
 
+    @jwt_required(verify_type=False)
     def post(self):
-
-        parser = reqparse.RequestParser()
-        parser.add_argument('username',
-                            help='This field cannot be blank',
-                            required=True)
-        data = parser.parse_args()
-        cur_user = UserModel.find_by_username(data['username'])
+        username = get_jwt_identity()
+        cur_user = UserModel.find_by_username(username)
         if not cur_user:
-            return {
-                'message': 'User {} does not exist'.format(data['username'])
-            }, 400
+            return {'message': 'User {} does not exist'.format(username)}, 401
         try:
-            result = return_user_data(cur_user)
+            token_type = get_jwt()['type']
+            access_token = None
+            if token_type == 'refresh':
+                access_token = create_access_token(identity=username)
+            result = return_user_data(cur_user, access_token)
             return result
         except:
             return {'message': 'Fail to return the markers list'}, 500
+
+
+class UpdateUserInfo(Resource):
+
+    @jwt_required(verify_type=False)
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('avatar')
+        parser.add_argument('username')
+        parser.add_argument('email')
+        parser.add_argument('new_password')
+        parser.add_argument('old_password')
+        parser.add_argument('locale')
+        parser.add_argument('display_user', type=bool)
+        parser.add_argument('display_other_users', type=bool)
+
+        # 更新 token
+        username = get_jwt_identity()
+        token_type = get_jwt()['type']
+        access_token = None
+        if token_type == 'refresh':
+            access_token = create_access_token(identity=username)
+
+        username = get_jwt_identity()
+        cur_user = UserModel.find_by_username(username)
+        if not cur_user:
+            return {'message': 'User {} does not exist'.format(username)}, 401
+        try:
+            # 更新用户信息，每次只能更新单一信息
+            data = parser.parse_args()
+            error_msg = None
+
+            if data['avatar']:
+                cur_user.avatar = data['avatar']
+            elif data['username']:
+                if UserModel.find_by_username(data['username']):
+                    error_msg = 'User {} already exists'.format(
+                        data['username'])
+                else:
+                    cur_user.username = data['username']
+            elif data['email']:
+                if UserModel.find_by_email(data['email']):
+                    error_msg = 'Email {} already exists'.format(data['email'])
+                else:
+                    cur_user.email = data['email']
+            elif (data['old_password'] and data['new_password']):
+                if UserModel.verify_hash(data['old_password'],
+                                         cur_user.password):
+                    cur_user.password = UserModel.generate_hash(
+                        data['new_password'])
+                else:
+                    error_msg = 'Wrong Old Password!'
+            elif data['locale']:
+                cur_user.locale = data['locale']
+
+            if isinstance(data['display_user'], bool):
+                cur_user.display_user = data['display_user']
+            if isinstance(data['display_other_users'], bool):
+                cur_user.display_other_users = data['display_other_users']
+            if error_msg:
+                return {'error': error_msg, 'access_token': access_token}
+            cur_user.save_to_db()
+            return {
+                'access_token': access_token,
+                'id': cur_user.id,
+                "username": cur_user.username
+            }
+        except:
+            return {'message': 'Fail to update the user information'}, 500
 
 
 #
@@ -163,7 +230,7 @@ class AddMarker(Resource):
 
     def post(self):
         parser = reqparse.RequestParser()
-        parser.add_argument('username',
+        parser.add_argument('id',
                             help='This field cannot be blank',
                             required=True)
         parser.add_argument('position',
@@ -172,20 +239,25 @@ class AddMarker(Resource):
         parser.add_argument('text',
                             help='This field cannot be blank',
                             required=True)
+        parser.add_argument('title',
+                            help='This field cannot be blank',
+                            required=True)
         parser.add_argument('images',
                             help='This field cannot be blank',
-                            required=False)
+                            required=False,
+                            action='append')
 
         data = parser.parse_args()
-        cur_user = UserModel.find_by_username(data['username'])
+        cur_user = UserModel.find_by_user_id(data['id'])
         if not cur_user:
             return {
                 'message': 'User {} does not exist'.format(data['username'])
-            }, 400
+            }, 401
 
         try:
             new_marker = MarkerModel(user=cur_user,
                                      position=data['position'],
+                                     title=data['title'],
                                      text=data['text'])
 
             if data['images']:

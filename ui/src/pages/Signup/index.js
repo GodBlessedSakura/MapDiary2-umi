@@ -1,30 +1,31 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Link, history } from 'umi'
 import { Form, Input, Button, message } from 'antd'
 import request from '@/utils/request'
+import UserContext from '@/context/user'
 import styles from './index.less'
 
 const Signup = () => {
   const [signupForm] = Form.useForm()
-
-  const handleSubmitForm = () => {
-    signupForm.validateFields().then((values) => {
-      const { username, email, password } = values
-      request
-        .post('/api/registration', {
-          data: {
-            username,
-            email,
-            password,
-          },
-        })
-        .then((response) => {
-          history.push('/')
-        })
-        .catch((error) => {
-          message.error(error)
-        })
+  const context = useContext(UserContext)
+  const handleSubmitForm = async () => {
+    const values = await signupForm.validateFields()
+    const { username, email, password } = values
+    const response = await request.post('/registration', {
+      data: {
+        username,
+        email,
+        password,
+      },
     })
+
+    if (response.id) {
+      const [user, getUserInfo] = context
+      getUserInfo()
+      history.push('/')
+    } else {
+      message.error(response.error)
+    }
   }
 
   return (
