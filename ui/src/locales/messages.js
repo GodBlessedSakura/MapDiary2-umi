@@ -1,0 +1,127 @@
+const messages = {
+  // 注册页
+  Register: ['注册', 'Register'],
+  Username: ['用户名', 'Username'],
+  UsernameInput: ['请输入用户名', 'Please input your username'],
+  Email: ['邮箱', 'Email'],
+  EmailInput: ['请输入邮箱', 'Please input your email'],
+  EmailInvalid: ['输入的邮箱格式不合法', 'The input is not valid E-mail!'],
+  Password: ['密码', 'Password'],
+  PasswordLength: ['密码长度应为6-16位', 'The password length should be 6-16'],
+  PasswordInput: ['请输入密码', 'Please input your password!'],
+  ConfirmPassword: ['确认密码', 'Confirm Password'],
+  ConfirmPasswordInput: ['请再次确认密码', 'Please confirm your password!'],
+  ConfirmPasswordError: ['两次输入的密码不一致', 'The two passwords that you entered do not match!'],
+  ConfirmPasswordEmptyError: ['密码不能为空', 'The password cannot be empty'],
+  SignUp: ['注册', 'Sign Up'],
+  SignIn: ['登录', 'Sign In'],
+  HaveAccount: ['已有账户？', 'Already have an account?'],
+  UsernameError: ['用户名已存在', 'Username existed'],
+  EmailError: ['邮箱已存在', 'Email existed'],
+  PasswordError: ['密码长度不合法', 'Invalid password length'],
+  RegisterError: ['注册失败', 'Fail to create the account'],
+
+  // 登录页
+  Login: ['登录', 'Login'],
+  NoAccount: ['还没有账户？', 'Do not have an account?'],
+
+  // 主页
+  GetOtherUserMarkersError: ['获取其他用户日记列表失败', "Fail to get other users' diaries"],
+  WriteDiary: ['写日记', 'Add Diary'],
+
+  // 主页 - SearchBox
+  SearchPlace: ['请输入想要搜索的地点', 'Search a place'],
+  // 主页 - Avatar
+  Settings: ['账号设置', 'Settings'],
+  Logout: ['退出登录', 'Logout'],
+  // 主页 - NewDiaryModal
+  Upload: ['上传', 'Upload'],
+  JPGorPNG: ['只能上传JPG或PNG文件!', 'Only accept JPG/PNG files'],
+  AddDiarySuccess: ['日记提交成功', 'Diary added successfully!'],
+  AddDiaryFail: ['日记提交失败', 'Fail to add the diary'],
+  AddDiaryTitle: ['创建新日记', 'Add a Diary'],
+  Publish: ['发表', 'Confirm'],
+  Cancel: ['取消', 'Cancel'],
+  Title: ['标题', 'Title'],
+  TitleInput: ['请输入标题内容', 'Please input the title'],
+  TitleInputError: ['标题内容不能为空', 'Title cannot be empty'],
+  Photos: ['照片', 'Photos'],
+  Thoughts: ['这一刻的想法', 'Your Thoughts'],
+  // 主页 - DiaryModal
+  DeleteDiarySuccess: ['日记删除成功', 'Diary deleted successfully'],
+  DeleteDiaryFailed: ['日记删除失败', 'Fail to delete the diary'],
+  UpdateDiarySuccess: ['日记更新成功', 'Diary updated successfully'],
+  UpdateDiaryFailed: ['日记更新失败', 'Fail to update the diary'],
+  EditDiary: ['编辑日记', 'Edit Diary'],
+  Update: ['更新', 'Update'],
+  Edit: ['编辑', 'Edit'],
+  Delete: ['删除', 'Delete'],
+  Close: ['关闭', 'Close'],
+  ContentLoading: ['内容加载中', 'Contents are loading'],
+  ContentInput: ['写点什么...', 'Write something...'],
+  // 主页 - DiaryList
+  MyDiary: ['我的日记', 'My Diary'],
+  StopTrack: ['停止/清除轨迹', 'Stop & Clear Track'],
+  DiaryTrack: ['日记轨迹', 'Diary Track'],
+  GetInfoError: ['获取用户信息失败', 'Fail to get the user information'],
+
+  // 设置页
+  UserSettings: ['用户设置', 'User'],
+  PrivacySettings: ['隐私设置', 'Privacy'],
+  BackToHomepage: ['回到主页', 'Homepage'],
+
+  // 设置页 - User
+  LessThan4MB: ['图片大小需小于4MB!', 'The picture size should be less than 4MB!'],
+  UploadAvatarSuccess: ['头像上传成功', 'Upload avatar successfully'],
+  UploadAvatarFailed: ['头像上传失败', 'Fail to upload avatar'],
+  UsernameUpdateSuccess: ['用户名更改成功, 请重新登录！', 'Username updated, please login again!'],
+  UsernameUpdateFailed: ['用户名更改失败！', 'Fail to update the username'],
+  EmailUpdateSuccess: ['邮箱更改成功', 'Email updated successfully'],
+  EmailUpdateFailed: ['邮箱更改失败', 'Fail to update the email'],
+  PasswordUpdateSuccess: ['密码更改成功,请重新登录', 'Password updated, please login again!'],
+  PasswordUpdateFailed: ['密码更改失败', 'Fail to update the password'],
+  LocaleUpdateSuccess: ['语言更改成功', 'Locale updated successfully!'],
+  LocaleUpdateFailed: ['语言更改失败', 'Fail to update the locale'],
+  UpdateAvatar: ['修改头像', 'Update Avatar'],
+  UpdateUsername: ['修改用户名', 'Update Username'],
+  UpdateEmail: ['修改邮箱', 'Update Email'],
+  UpdatePassword: ['修改密码', 'Change Password'],
+  ConfirmUpdate: ['确认修改', 'Confirm'],
+  CurrentUsername: ['当前用户名', 'Current Username'],
+  NewUsername: ['新的用户名', 'New Username'],
+  NewUsernameInput: ['请输入新的用户名', 'Please input the new username'],
+  NewUsernameError: ['新用户名不能为空！', 'New Username cannot be empty'],
+  CurrentEmail: ['当前邮箱', 'Current Email'],
+  NewEmail: ['新的邮箱', 'New Email'],
+  NewEmailInput: ['请输入新的邮箱', 'Please input the new Email'],
+  NewEmailError: ['输入的不是有效邮箱格式', 'Invalid Email format'],
+
+  OldPassword: ['旧密码', 'Old Password'],
+  OldPasswordInput: ['请输入旧密码', 'Please input the old password'],
+  'OldPassword.Error': ['旧密码不能为空', 'Old password cannot be empty'],
+
+  NewPassword: ['新密码', 'New Password'],
+  NewPasswordInput: ['请输入新的密码', 'Please input the new password'],
+  NewPasswordError: ['新密码不能为空', 'New password cannot be empty'],
+
+  ChangeLocale: ['修改语言设置', 'Language'],
+  Chinese: ['中文', 'Chinese'],
+  English: ['英文', 'English'],
+  // 设置页 - Privacy
+  SettingsUpdateSuccess: ['设置更新成功', 'Settings updated successfully'],
+  SettingsUpdateFailed: ['设置更新失败', 'Fail to update settings'],
+  DisplayUser: ['公开自己的标记', 'Publish my diaries'],
+  DisplayOtherUsers: ['查看他人标记', "See others' diaries"],
+  // 设置页 - Admin
+  AdminFunction: ['管理员功能', 'Admin'],
+  GetUserListError: ['获取用户列表失败', 'Fail to get user list'],
+  BanAccountSuccess: ['成功禁用此账号', 'Account banned successfully'],
+  BanAccountFailed: ['禁用此账号失败', 'Fail to ban the account'],
+  EnableAccountSuccess: ['成功启用此账号', 'Account enabled successfully'],
+  EnableAccountFailed: ['启用此账号失败', 'Fail to enable the account'],
+  DiaryList: ['日记列表', 'Diary List'],
+  UserList: ['用户列表', 'User List'],
+  XDiary: ['篇日记', 'diaries'],
+}
+
+export default messages
