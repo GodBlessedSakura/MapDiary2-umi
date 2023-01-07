@@ -1,6 +1,7 @@
 import { AutoComplete } from 'react-bmapgl'
 import { Input } from 'antd'
 import React from 'react'
+import { Md2FormatMessage } from '@/utils/locale'
 
 export default function SearchBox(props) {
   const { map } = props
@@ -20,7 +21,7 @@ export default function SearchBox(props) {
   }
   return (
     <div>
-      <Input id="ac" style={{ position: 'absolute', zIndex: '100', top: '10px', left: '100px', width: '200px' }} placeholder="输入想要搜索的地点" />
+      <Input id="ac" style={{ position: 'absolute', zIndex: '100', top: '10px', left: '100px', width: '200px' }} placeholder={Md2FormatMessage('SearchPlace')} />
       <AutoComplete input="ac" onConfirm={handleConfirm} />
     </div>
   )

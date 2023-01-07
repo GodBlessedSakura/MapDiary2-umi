@@ -8,6 +8,7 @@ import { PlusOutlined } from '@ant-design/icons'
 import ImgCrop from 'antd-img-crop'
 import UserContext from '@/context/user'
 import styles from './index.less'
+import { Md2FormatMessage } from '@/utils/locale'
 
 const formItemLayout = {
   labelCol: { span: 4 },
@@ -32,11 +33,11 @@ export default function User() {
   const handleChangeAvatarUpload = ({ file, fileList: newFileList }) => {
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
     if (!isJpgOrPng) {
-      return message.error('只能上传JPG或PNG文件!')
+      return message.error(Md2FormatMessage('JPGorPNG'))
     }
     const isLt4M = file.size / 1024 / 1024 < 4
     if (!isLt4M) {
-      return message.error('图片大小需小于4MB!')
+      return message.error(Md2FormatMessage('LessThan4MB'))
     }
 
     setFileList(newFileList)
@@ -51,10 +52,10 @@ export default function User() {
       },
     })
     if (response.id) {
-      message.success('头像上传成功')
+      message.success(Md2FormatMessage('UploadAvatarSuccess'))
       cb()
     } else {
-      message.error('头像上传失败')
+      message.error(Md2FormatMessage('UploadAvatarFailed'))
     }
   }
   const getUploadButton = () => (
@@ -65,7 +66,7 @@ export default function User() {
           marginTop: 8,
         }}
       >
-        上传
+        {Md2FormatMessage('Upload')}
       </div>
     </div>
   )
@@ -77,11 +78,11 @@ export default function User() {
       },
     })
     if (response.id) {
-      message.success('用户名更改成功,请重新登录！')
+      message.success(Md2FormatMessage('UsernameUpdateSuccess'))
       clearTokens()
       history.push('/login')
     } else {
-      message.error(response.error)
+      message.error(Md2FormatMessage('UsernameUpdateFailed'))
     }
   }
 
@@ -93,10 +94,10 @@ export default function User() {
       },
     })
     if (response.id) {
-      message.success('邮箱更改成功')
+      message.success(Md2FormatMessage('EmailUpdateSuccess'))
       cb()
     } else {
-      message.error('邮箱更改失败')
+      message.error(Md2FormatMessage('EmailUpdateFailed'))
     }
   }
 
@@ -109,11 +110,11 @@ export default function User() {
       },
     })
     if (response.id) {
-      message.success('密码更改成功，请重新登录')
+      message.success(Md2FormatMessage('PasswordUpdateSuccess'))
       clearTokens()
       history.push('/login')
     } else {
-      message.error('密码更改失败')
+      message.error(Md2FormatMessage('PasswordUpdateFailed'))
     }
   }
 
@@ -125,10 +126,10 @@ export default function User() {
       },
     })
     if (response.id) {
-      message.success('语言更改成功！')
+      message.success(Md2FormatMessage('LocaleUpdateSuccess'))
       cb()
     } else {
-      message.error('语言更改失败')
+      message.error(Md2FormatMessage('LocaleUpdateFailed'))
     }
   }
   return (
@@ -136,7 +137,7 @@ export default function User() {
       {([user, getUserInfo]) => (
         <Form form={form} {...formItemLayout} autoComplete="new-password">
           <Form.Item {...titleLayout}>
-            <h3 style={{ fontWeight: '600' }}>修改头像</h3>
+            <h3 style={{ fontWeight: '600' }}>{Md2FormatMessage('UpdateAvatar')}</h3>
           </Form.Item>
           <Form.Item name="avatar" style={{ paddingLeft: '195px' }}>
             <ImgCrop rotate>
@@ -147,131 +148,137 @@ export default function User() {
           </Form.Item>
           <Form.Item {...buttonLayout}>
             <Button type="primary" onClick={() => updateAvatar(getUserInfo)}>
-              确认修改
+              {Md2FormatMessage('ConfirmUpdate')}
             </Button>
           </Form.Item>
           <Divider />
           <Form.Item {...titleLayout}>
-            <h3 style={{ fontWeight: '600' }}>修改用户名</h3>
+            <h3 style={{ fontWeight: '600' }}>{Md2FormatMessage('UpdateUsername')}</h3>
           </Form.Item>
-          <Form.Item label="当前用户名">
+          <Form.Item label={Md2FormatMessage('CurrentUsername')}>
             <Input value={user?.username} disabled />
           </Form.Item>
           <Form.Item
-            label="新的用户名"
+            label={Md2FormatMessage('NewUsername')}
             rules={[
               {
                 required: true,
                 whitespace: true,
-                message: '新用户名不能为空！',
+                message: Md2FormatMessage('NewUsernameError'),
               },
             ]}
             name="newUsername"
           >
-            <Input placeholder="请输入新的用户名" />
+            <Input placeholder={Md2FormatMessage('NewUsernameInput')} />
           </Form.Item>
           <Form.Item {...buttonLayout}>
             <Button type="primary" onClick={updateUsername}>
-              确认修改
+              {Md2FormatMessage('ConfirmUpdate')}
             </Button>
           </Form.Item>
           <Divider />
           <Form.Item {...titleLayout}>
-            <h3 style={{ fontWeight: '600' }}>修改邮箱</h3>
+            <h3 style={{ fontWeight: '600' }}>{Md2FormatMessage('UpdateEmail')}</h3>
           </Form.Item>
-          <Form.Item label="当前邮箱">
+          <Form.Item label={Md2FormatMessage('CurrentEmail')}>
             <Input value={user?.email} disabled />
           </Form.Item>
           <Form.Item
-            label="新的邮箱"
+            label={Md2FormatMessage('NewEmail')}
             rules={[
               {
                 required: true,
                 whitespace: true,
-                message: '请输入新邮箱',
+                message: Md2FormatMessage('NewEmailInput'),
               },
               {
                 type: 'email',
-                message: '输入的不是有效邮箱格式',
+                message: Md2FormatMessage('NewEmailError'),
               },
             ]}
             name="newEmail"
           >
-            <Input type="" placeholder="请输入新的邮箱" />
+            <Input placeholder={Md2FormatMessage('NewEmailInput')} />
           </Form.Item>
           <Form.Item {...buttonLayout}>
             <Button type="primary" onClick={() => updateEmail(getUserInfo)}>
-              确认修改
+              {Md2FormatMessage('ConfirmUpdate')}
             </Button>
           </Form.Item>
           <Divider />
           <Form.Item {...titleLayout}>
-            <h3 style={{ fontWeight: '600' }}>修改密码</h3>
+            <h3 style={{ fontWeight: '600' }}>{Md2FormatMessage('UpdatePassword')}</h3>
           </Form.Item>
           <Form.Item
             name="oldPassword"
-            label="旧密码"
+            label={Md2FormatMessage('OldPassword')}
             rules={[
               {
                 required: true,
                 whitespace: true,
-                message: '旧密码不能为空',
+                message: Md2FormatMessage('OldPassword.Error'),
               },
             ]}
           >
-            <Input.Password placeholder="请输入旧密码" />
+            <Input.Password placeholder={Md2FormatMessage('OldPasswordInput')} />
           </Form.Item>
           <Form.Item
             name="newPassword"
-            label="新密码"
+            label={Md2FormatMessage('NewPassword')}
             rules={[
               {
                 required: true,
                 whitespace: true,
-                message: '新密码不能为空',
+                message: Md2FormatMessage('NewPasswordError'),
+              },
+              {
+                min: 6,
+                max: 16,
+                message: Md2FormatMessage('PasswordLength'),
               },
             ]}
           >
-            <Input.Password placeholder="请输入新密码" />
+            <Input.Password placeholder={Md2FormatMessage('NewPasswordInput')} />
           </Form.Item>
           <Form.Item
             name="confirm"
-            label="确认新密码"
+            label={Md2FormatMessage('ConfirmPassword')}
             dependencies={['newPassword']}
             hasFeedback
             rules={[
               {
                 required: true,
-                message: '新密码不能为空',
+                whitespace: true,
+                message: Md2FormatMessage('ConfirmPasswordEmptyError'),
               },
               ({ getFieldValue }) => ({
                 validator(_, value) {
                   if (!value || getFieldValue('newPassword') === value) {
                     return Promise.resolve()
                   }
-                  return Promise.reject(new Error('两次输入的密码不匹配'))
+                  return Promise.reject(new Error(Md2FormatMessage('ConfirmPasswordError')))
                 },
               }),
             ]}
           >
-            <Input.Password placeholder="请再次输入新密码" />
+            <Input.Password placeholder={Md2FormatMessage('ConfirmPasswordInput')} />
           </Form.Item>
           <Form.Item {...buttonLayout}>
             <Button type="primary" onClick={updatePassword}>
-              确认修改
+              {Md2FormatMessage('ConfirmUpdate')}
             </Button>
           </Form.Item>
           <Divider />
           <Form.Item {...titleLayout}>
-            <h3 style={{ fontWeight: '600' }}>修改语言设置</h3>
+            <h3 style={{ fontWeight: '600' }}>{Md2FormatMessage('ChangeLocale')}</h3>
           </Form.Item>
           <Form.Item name="locale" initialValue={user?.locale} wrapperCol={{ span: 4 }}>
             <Radio.Group size="large" style={{ float: 'right' }}>
               <Radio.Button value="CN" onClick={() => updateLocale(user?.locale, 'CN', getUserInfo)}>
-                中文
+                {Md2FormatMessage('Chinese')}
               </Radio.Button>
               <Radio.Button value="EN" onClick={() => updateLocale(user?.locale, 'EN', getUserInfo)}>
-                英文
+                {Md2FormatMessage('English')}
               </Radio.Button>
             </Radio.Group>
           </Form.Item>

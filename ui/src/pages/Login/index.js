@@ -6,6 +6,7 @@ import UserContext from '@/context/user'
 import request from '@/utils/request'
 import styles from './index.less'
 import imgUrl from '@/assets/LoginLogo.JPG'
+import { Md2FormatMessage } from '@/utils/locale'
 
 export default function Login() {
   const [loginForm] = Form.useForm()
@@ -40,11 +41,11 @@ export default function Login() {
               {
                 required: true,
                 whitespace: true,
-                message: 'Please input the username!',
+                message: Md2FormatMessage('UsernameInput'),
               },
             ]}
           >
-            <Input prefix={<UserOutlined />} autoComplete="off" placeholder="Username" />
+            <Input prefix={<UserOutlined />} autoComplete="off" placeholder={Md2FormatMessage('Username')} />
           </Form.Item>
           <Form.Item
             name="password"
@@ -52,27 +53,22 @@ export default function Login() {
               {
                 required: true,
                 whitespace: true,
-                message: 'Please input your password!',
+                message: Md2FormatMessage('PasswordInput'),
               },
             ]}
           >
-            <Input.Password prefix={<LockOutlined />} autoComplete="off" placeholder="Password" />
+            <Input.Password prefix={<LockOutlined />} autoComplete="off" placeholder={Md2FormatMessage('Password')} />
           </Form.Item>
           <Form.Item>
             <Button type="primary" style={{ width: '100%' }} htmlType="submit">
-              Login
+              {Md2FormatMessage('Login')}
             </Button>
           </Form.Item>
           <div className={styles.bottom}>
             <Form.Item>
               <div>
-                <Form.Item name="keepLoggedIn" noStyle>
-                  <Switch defaultChecked={false} />
-                </Form.Item>
-                <span style={{ color: '#1677ff' }}>&nbsp;&nbsp;Keep logged in</span>
-              </div>
-              <div>
-                <Link to="/signup">Sign Up</Link>
+                {Md2FormatMessage('NoAccount')}&nbsp;
+                <Link to="/signup">{Md2FormatMessage('SignUp')}</Link>
               </div>
             </Form.Item>
           </div>

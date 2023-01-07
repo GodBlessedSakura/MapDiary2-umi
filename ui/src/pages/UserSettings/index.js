@@ -1,11 +1,12 @@
 import React from 'react'
-import { UserOutlined, SettingOutlined, LogoutOutlined } from '@ant-design/icons'
+import { UserOutlined, SettingOutlined, LogoutOutlined, LockOutlined } from '@ant-design/icons'
 import { Avatar, Layout, Menu, theme, Space, Dropdown, Button, Spin } from 'antd'
 import withAuth from '@/hocs/withAuth'
 import { Link, Outlet, history } from 'umi'
 import { clearTokens } from '@/utils/token'
 import UserContext from '@/context/user'
 import styles from './index.less'
+import { Md2FormatMessage } from '@/utils/locale'
 
 const { Header, Content, Footer, Sider } = Layout
 
@@ -17,12 +18,17 @@ const UserSettings = () => {
     {
       key: '1',
       icon: <UserOutlined />,
-      label: <Link to="/settings/user">用户设置</Link>,
+      label: <Link to="/settings/user">{Md2FormatMessage('UserSettings')}</Link>,
     },
     {
       key: '2',
       icon: <SettingOutlined />,
-      label: <Link to="/settings/privacy">隐私设置</Link>,
+      label: <Link to="/settings/privacy">{Md2FormatMessage('PrivacySettings')}</Link>,
+    },
+    {
+      key: '3',
+      icon: <LockOutlined />,
+      label: <Link to="/settings/admin">{Md2FormatMessage('AdminFunction')}</Link>,
     },
   ]
   const logOut = () => {
@@ -34,6 +40,7 @@ const UserSettings = () => {
     const url = location.pathname
     if (url.includes('settings/user')) return '1'
     if (url.includes('settings/privacy')) return '2'
+    if (url.includes('settings/admin')) return '3'
   }
 
   return (
@@ -60,11 +67,11 @@ const UserSettings = () => {
                     background: colorBgContainer,
                   }}
                 >
-                  <h2>账号设置</h2>
+                  <h2>{Md2FormatMessage('Settings')}</h2>
                   <div className={styles['header-right']}>
                     <Space size={30}>
                       <div>
-                        <Link to="/">回到主页</Link>
+                        <Link to="/">{Md2FormatMessage('BackToHomepage')}</Link>
                       </div>
                       <div>
                         <Dropdown
@@ -76,7 +83,7 @@ const UserSettings = () => {
                                   <div onClick={logOut}>
                                     <Space>
                                       <LogoutOutlined />
-                                      退出登录
+                                      {Md2FormatMessage('Logout')}
                                     </Space>
                                   </div>
                                 ),

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import UAvatar from './UAvatar'
 import withAuth from '@/hocs/withAuth'
 import UserContext from '@/context/user'

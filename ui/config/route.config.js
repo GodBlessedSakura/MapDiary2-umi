@@ -9,6 +9,7 @@ export default [
     routes: [
       { path: '/settings/user', component: './UserSettings/User' },
       { path: '/settings/privacy', component: './UserSettings/Privacy' },
+      { path: '/settings/admin', component: './UserSettings/Admin' },
     ],
   },
 ]

@@ -4,6 +4,7 @@ import { Link, history } from 'umi'
 import { clearTokens } from '@/utils/token'
 import { UserOutlined, SettingOutlined, LogoutOutlined } from '@ant-design/icons'
 import styles from './index.less'
+import { Md2FormatMessage } from '@/utils/locale'
 
 const UAvatar = (props) => {
   const { avatar } = props
@@ -18,7 +19,7 @@ const UAvatar = (props) => {
         <Link to="/settings/user">
           <Space>
             <SettingOutlined />
-            账号设置
+            {Md2FormatMessage('Settings')}
           </Space>
         </Link>
       ),
@@ -29,7 +30,7 @@ const UAvatar = (props) => {
         <div onClick={logOut}>
           <Space>
             <LogoutOutlined />
-            退出登录
+            {Md2FormatMessage('Logout')}
           </Space>
         </div>
       ),

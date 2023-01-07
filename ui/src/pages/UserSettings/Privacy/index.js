@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Button, Divider, Form, message, Switch, Spin } from 'antd'
 import UserContext from '@/context/user'
 import request from '@/utils/request'
+import { Md2FormatMessage } from '@/utils/locale'
 
 const formItemLayout = {
   labelCol: { span: 4 },
@@ -24,10 +25,10 @@ export default function Privacy() {
       },
     })
     if (response.id) {
-      message.success('设置更新成功')
+      message.success(Md2FormatMessage('SettingsUpdateSuccess'))
       cb()
     } else {
-      message.error('设置更新失败')
+      message.error(Md2FormatMessage('SettingsUpdateFailed'))
     }
   }
 
@@ -40,15 +41,15 @@ export default function Privacy() {
               <h3 style={{ fontWeight: '600', paddingLeft: '150px' }}>个性化设置</h3>
             </Form.Item>
             <Divider />
-            <Form.Item label="公开自己的标记" name="displayUser">
+            <Form.Item label={Md2FormatMessage('DisplayUser')} name="displayUser">
               <Switch defaultChecked={user.displayUser} />
             </Form.Item>
-            <Form.Item label="查看他人的标记" name="displayOtherUsers">
+            <Form.Item label={Md2FormatMessage('DisplayOtherUsers')} name="displayOtherUsers">
               <Switch defaultChecked={user.displayOtherUsers} />
             </Form.Item>
             <Form.Item {...buttonLayout}>
               <Button type="primary" style={{ marginLeft: '-128px' }} onClick={() => updatePrivacySettings(getUserInfo)}>
-                确认修改
+                {Md2FormatMessage('ConfirmUpdate')}
               </Button>
             </Form.Item>
           </Form>

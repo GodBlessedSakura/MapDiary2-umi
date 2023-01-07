@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import { Link, history } from 'umi'
 import { Form, Input, Button, message } from 'antd'
 import request from '@/utils/request'
+import { Md2FormatMessage } from '@/utils/locale'
 import UserContext from '@/context/user'
 import styles from './index.less'
 
@@ -24,7 +25,15 @@ const Signup = () => {
       getUserInfo()
       history.push('/')
     } else {
-      message.error(response.error)
+      if (response['username_error']) {
+        message.error(Md2FormatMessage('UsernameError'))
+      } else if (response['email_error']) {
+        message.error(Md2FormatMessage('EmailError'))
+      } else if (response['password_error']) {
+        message.error(Md2FormatMessage('PasswordError'))
+      } else {
+        message.error(Md2FormatMessage('RegisterError'))
+      }
     }
   }
 
@@ -33,82 +42,87 @@ const Signup = () => {
       <div className={styles.main}>
         <div className={styles.logo}></div>
         <div className={styles['form-wrapper']}>
-          <h3>Register</h3>
+          <h3>{Md2FormatMessage('Register')}</h3>
           <Form className={styles.form} form={signupForm} layout="vertical" onFinish={handleSubmitForm}>
             <Form.Item
               name="username"
-              label="Username"
+              label={Md2FormatMessage('Username')}
               rules={[
                 {
                   required: true,
                   whitespace: true,
-                  message: 'Please input the username!',
+                  message: Md2FormatMessage('UsernameInput'),
                 },
               ]}
             >
-              <Input autoComplete="off" placeholder="Please input your name" />
+              <Input autoComplete="off" placeholder={Md2FormatMessage('UsernameInput')} />
             </Form.Item>
             <Form.Item
               name="email"
-              label="Email"
+              label={Md2FormatMessage('Email')}
               rules={[
                 {
                   required: true,
                   whitespace: true,
-                  message: 'Please input the email!',
+                  message: Md2FormatMessage('EmailInput'),
                 },
                 {
                   type: 'email',
-                  message: 'The input is not valid E-mail!',
+                  message: Md2FormatMessage('EmailInvalid'),
                 },
               ]}
             >
-              <Input autoComplete="off" placeholder="Please input your email" />
+              <Input autoComplete="off" placeholder={Md2FormatMessage('EmailInput')} />
             </Form.Item>
             <Form.Item
               name="password"
-              label="Password"
+              label={Md2FormatMessage('Password')}
               rules={[
                 {
                   required: true,
                   whitespace: true,
-                  message: 'Please input your password!',
+                  message: Md2FormatMessage('PasswordInput'),
+                },
+                {
+                  min: 6,
+                  max: 16,
+                  message: Md2FormatMessage('PasswordLength'),
                 },
               ]}
             >
-              <Input.Password autoComplete="off" placeholder="Please input your password" />
+              <Input.Password autoComplete="off" placeholder={Md2FormatMessage('PasswordInput')} />
             </Form.Item>
             <Form.Item
               name="confirm"
-              label="Confirm Password"
+              label={Md2FormatMessage('ConfirmPassword')}
               dependencies={['password']}
               hasFeedback
               rules={[
                 {
                   required: true,
-                  message: 'Please confirm your password!',
+                  message: Md2FormatMessage('ConfirmPasswordInput'),
                 },
                 ({ getFieldValue }) => ({
                   validator(_, value) {
                     if (!value || getFieldValue('password') === value) {
                       return Promise.resolve()
                     }
-                    return Promise.reject(new Error('The two passwords that you entered do not match!'))
+                    return Promise.reject(new Error(Md2FormatMessage('ConfirmPasswordError')))
                   },
                 }),
               ]}
             >
-              <Input.Password autoComplete="off" placeholder="Please re-enter your password" />
+              <Input.Password autoComplete="off" placeholder={Md2FormatMessage('ConfirmPasswordInput')} />
             </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit">
-                Sign Up
+                {Md2FormatMessage('SignUp')}
               </Button>
             </Form.Item>
             <p>
-              Already have an account?
+              {Md2FormatMessage('HaveAccount')}
               <Link to="/login">
-                <span className={styles.bald}>&nbsp;&nbsp;&nbsp;Sign in</span>
+                <span className={styles.bald}>&nbsp;&nbsp;&nbsp;{Md2FormatMessage('SignIn')}</span>
               </Link>
             </p>
           </Form>

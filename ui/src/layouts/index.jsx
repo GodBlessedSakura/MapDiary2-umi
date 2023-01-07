@@ -1,9 +1,12 @@
-import { Outlet } from 'umi'
+import { Outlet, setLocale } from 'umi'
 import { useState, useEffect } from 'react'
+import { message } from 'antd'
 import request from '@/utils/request'
 import UserContext from '@/context/user'
+import { localeMapForEditor, localeMapForUmi } from '@/locales/map'
+import { i18nChangeLanguage } from '@wangeditor/editor'
+import { Md2FormatMessage } from '@/utils/locale'
 import styles from './index.less'
-import { message } from 'antd'
 
 export default function Layout() {
   const [user, setUser] = useState(null)
@@ -14,8 +17,10 @@ export default function Layout() {
     console.log('response', response)
     if (response) {
       setUser(response)
+      setLocale(localeMapForUmi[response.locale], true)
+      i18nChangeLanguage(localeMapForEditor[response.locale])
     } else {
-      message.error('获取用户信息失败')
+      message.error(Md2FormatMessage('GetInfoError'))
     }
   }
   useEffect(() => {

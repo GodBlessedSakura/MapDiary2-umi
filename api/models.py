@@ -39,6 +39,15 @@ class MarkerModel(db.Model):
     def find_by_marker_id(cls, marker_id):
         return cls.query.filter_by(id=marker_id, enable=True).first()
 
+    @classmethod
+    def return_other_user_markers(cls, user):
+        result = []
+        markers = cls.query.filter_by(enable=True).all()
+        for marker in markers:
+            if marker.user != user and marker.user.enable and marker.user.display_user:
+                result.append(marker)
+        return result
+
     # 类方法
     @classmethod
     def return_all_valid(cls):

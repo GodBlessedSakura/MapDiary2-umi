@@ -30,10 +30,14 @@ api.add_resource(resources.TokenRefresh, '/token/refresh')
 api.add_resource(resources.SecretResource, '/secret')
 # 业务接口
 api.add_resource(resources.GetUserInfo, '/user/get_info')
+api.add_resource(resources.GetImages, '/user/get_images')  # 通过marker的id获取图片信息
+api.add_resource(resources.GetOtherUserMarkers, '/user/get_other_user_markers')
 api.add_resource(resources.UpdateUserInfo, '/user/update_info')
 api.add_resource(resources.AddMarker, '/user/add_marker')
 api.add_resource(resources.RemoveMarker, '/user/remove_marker')
-api.add_resource(resources.GetAllUsers, '/users')
+api.add_resource(resources.UpdateMarker, '/user/update_marker')
+api.add_resource(resources.GetAllUsers, '/user/get_all_users')
+api.add_resource(resources.BanOrEnable, '/user/ban_or_enable')
 api.add_resource(resources.GetAllMarkers, '/markers')
 
 

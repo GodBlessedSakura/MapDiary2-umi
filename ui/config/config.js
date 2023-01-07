@@ -4,6 +4,13 @@ import plugins from '../src/plugins'
 
 export default defineConfig({
   routes: routes,
+  locale: {
+    // 默认使用 src/locales/zh-CN.ts 作为多语言文件
+    // umi4配置locale需要安装@umi/plugins 并在plugins里进行配置
+    default: 'zh-CN',
+    baseSeparator: '-',
+  },
+  favicons: ['/favicon.ico'],
   plugins,
   proxy: {
     '/api': {
