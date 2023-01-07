@@ -21,6 +21,7 @@ class MarkerModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     position = db.Column(db.String(120), nullable=False)
     text = db.Column(db.Text, nullable=False)
+    title = db.Column(db.String(120), nullable=False)
     enable = db.Column(db.Boolean, default=True, nullable=False)
 
     # User表的外键，指定外键的时候，是使用的是数据库表的名称，而不是类名
@@ -37,6 +38,15 @@ class MarkerModel(db.Model):
     @classmethod
     def find_by_marker_id(cls, marker_id):
         return cls.query.filter_by(id=marker_id, enable=True).first()
+
+    @classmethod
+    def return_other_user_markers(cls, user):
+        result = []
+        markers = cls.query.filter_by(enable=True).all()
+        for marker in markers:
+            if marker.user != user and marker.user.enable and marker.user.display_user:
+                result.append(marker)
+        return result
 
     # 类方法
     @classmethod
@@ -65,7 +75,7 @@ class UserModel(db.Model):
     avatar = db.Column(db.Text, nullable=True)
     is_admin = db.Column(db.Boolean, default=False, nullable=False)
     display_user = db.Column(db.Boolean, default=True, nullable=False)
-    hide_other_users = db.Column(db.Boolean, default=True, nullable=False)
+    display_other_users = db.Column(db.Boolean, default=True, nullable=False)
     locale = db.Column(db.String(120), default='CN', nullable=False)
     enable = db.Column(db.Boolean, default=True, nullable=False)
 
@@ -78,6 +88,14 @@ class UserModel(db.Model):
     @classmethod
     def find_by_username(cls, username):
         return cls.query.filter_by(username=username).first()
+
+    @classmethod
+    def find_by_email(cls, email):
+        return cls.query.filter_by(email=email).first()
+
+    @classmethod
+    def find_by_user_id(cls, id):
+        return cls.query.filter_by(id=id).first()
 
     @classmethod
     def return_all(cls):

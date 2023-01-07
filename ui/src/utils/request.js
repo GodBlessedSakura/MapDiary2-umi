@@ -1,5 +1,5 @@
 import { extend } from 'umi-request'
-import { notification } from 'antd'
+import { message, notification } from 'antd'
 import { history } from 'umi'
 import jwtDecode from 'jwt-decode'
 import { getTokens, clearTokens, setTokens } from './token'
@@ -47,7 +47,7 @@ const errorHandler = (error) => {
     }
 
     if (status === 401) {
-      notification.warn({
+      notification.warning({
         message: '请重新登陆!',
       })
       clearTokens()
@@ -72,8 +72,9 @@ const errorHandler = (error) => {
  */
 const request = extend({
   errorHandler, // 默认错误处理
+  prefix: '/api',
   credentials: 'include', // 默认请求是否带上cookie
-  timeout: 6000,
+  timeout: 20000,
 })
 
 /**
@@ -89,7 +90,7 @@ request.interceptors.request.use((url, options) => {
 
     const { exp } = jwtDecode(accessToken)
     const curTime = Date.now()
-    token = curTime > exp * 1000 ? accessToken : refreshToken
+    token = curTime > exp * 1000 ? refreshToken : accessToken
   }
   return {
     url,
@@ -107,8 +108,8 @@ request.interceptors.request.use((url, options) => {
  */
 request.interceptors.response.use(async (response, options) => {
   const data = await response.clone().json()
-  const { user_name: userName, access_token: accessToken, refresh_token: refreshToken } = data
-  setTokens(userName, accessToken, refreshToken)
+  const { username, access_token: accessToken, refresh_token: refreshToken } = data
+  setTokens(username, accessToken, refreshToken)
 
   return response
 })

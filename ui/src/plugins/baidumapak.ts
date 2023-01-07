@@ -16,4 +16,10 @@ export default (api: IApi) => {
       type:'text/javascript'
     }
   })
+  api.addHTMLHeadScripts(() => {
+    return {
+      src: '//api.map.baidu.com/library/TrackAnimation/src/TrackAnimation_min.js',
+      type:'text/javascript'
+    }
+  })
 };

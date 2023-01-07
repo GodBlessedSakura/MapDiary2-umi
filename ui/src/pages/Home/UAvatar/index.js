@@ -1,13 +1,16 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Avatar, Dropdown, Space } from 'antd'
-import { Link } from 'umi'
+import { Link, history } from 'umi'
+import { clearTokens } from '@/utils/token'
 import { UserOutlined, SettingOutlined, LogoutOutlined } from '@ant-design/icons'
 import styles from './index.less'
+import { Md2FormatMessage } from '@/utils/locale'
 
-const UAvatar = () => {
-  const [userAvatar, setUserAvatar] = useState(null)
+const UAvatar = (props) => {
+  const { avatar } = props
   const logOut = () => {
-    console.log('退出登录')
+    clearTokens()
+    history.push('/login')
   }
   const items = [
     {
@@ -16,7 +19,7 @@ const UAvatar = () => {
         <Link to="/settings/user">
           <Space>
             <SettingOutlined />
-            账号设置
+            {Md2FormatMessage('Settings')}
           </Space>
         </Link>
       ),
@@ -27,7 +30,7 @@ const UAvatar = () => {
         <div onClick={logOut}>
           <Space>
             <LogoutOutlined />
-            退出登录
+            {Md2FormatMessage('Logout')}
           </Space>
         </div>
       ),
@@ -41,7 +44,7 @@ const UAvatar = () => {
           items,
         }}
       >
-        <Avatar size={46} icon={userAvatar || <UserOutlined />} />
+        <Avatar size={46} icon={avatar ? null : <UserOutlined />} src={avatar} />
       </Dropdown>
     </div>
   )
