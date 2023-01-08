@@ -36,16 +36,18 @@
   - $ .\env\Scripts\activate
 
 - 安装依赖
-  $ pip install -r requirements.txt
+
+  - $ pip install -r requirements.txt
 
 - 运行后端
-  $ flask run
+
+  - $ flask run
 
 - 每次启动执行以下操作即可
-  $ cd api
-  $ source env/bin/activate (Unix)
-  $ .\env\Scripts\activate (Windows)
-  $ flask run
+  - $ cd api
+  - $ source env/bin/activate (Unix)
+  - $ .\env\Scripts\activate (Windows)
+  - $ flask run
 
 #### 前端启动
 
