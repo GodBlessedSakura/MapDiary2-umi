@@ -87,10 +87,11 @@ request.interceptors.request.use((url, options) => {
   let token = null
   if (jwtNotRequiredUrls.indexOf(url) === -1) {
     const { accessToken, refreshToken } = getTokens()
-
-    const { exp } = jwtDecode(accessToken)
-    const curTime = Date.now()
-    token = curTime > exp * 1000 ? refreshToken : accessToken
+    if (accessToken && refreshToken) {
+      const { exp } = jwtDecode(accessToken)
+      const curTime = Date.now()
+      token = curTime > exp * 1000 ? refreshToken : accessToken
+    }
   }
   return {
     url,

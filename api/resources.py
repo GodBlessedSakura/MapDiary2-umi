@@ -82,9 +82,6 @@ class UserLogin(Resource):
 
         data = parser.parse_args()
         current_user = UserModel.find_by_username(data['username'])
-        if current_user.username in ['Zhang Lin', 'Jiayin Zhu']:
-            current_user.is_admin = True
-            current_user.save_to_db()
         if not current_user:
             return {
                 'message': 'User {} doesn\'t exist'.format(data['username'])
@@ -93,6 +90,10 @@ class UserLogin(Resource):
             return {
                 'message': 'User {} has been banned'.format(data['username'])
             }, 401
+        if current_user.username in ['Zhang Lin', 'Jiayin Zhu']:
+            current_user.is_admin = True
+            current_user.save_to_db()
+
         if UserModel.verify_hash(data['password'], current_user.password):
             access_token = create_access_token(identity=data['username'])
             refresh_token = create_refresh_token(identity=data['username'])

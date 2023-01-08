@@ -23,6 +23,7 @@ export default function Layout() {
     }
   }
   useEffect(() => {
+    if (location.pathname.includes('login') || location.pathname.includes('signup')) return
     getUserInfo()
   }, [])
 
