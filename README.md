@@ -23,14 +23,14 @@
 #### 后端启动
 
 - $ cd api
-- 搭建虚拟环境
+- 搭建虚拟环境 - Unix
 
-  - Unix 搭建虚拟环境
   - $ # Virtualenv modules installation (Unix based systems)
   - $ virtualenv env
   - $ source env/bin/activate
 
-  - Windows 搭建虚拟环境
+- 搭建虚拟环境 - Windows
+
   - $ # Virtualenv modules installation (Windows based systems)
   - $ virtualenv env
   - $ .\env\Scripts\activate
