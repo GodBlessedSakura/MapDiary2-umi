@@ -17,3 +17,42 @@
   - 密码找回功能 (Todo)
 
 - 部署至服务器 (Todo)
+
+### 启动项目
+
+#### 后端启动
+
+- $ cd api
+- 搭建虚拟环境
+
+  - Unix 搭建虚拟环境
+    $ # Virtualenv modules installation (Unix based systems)
+    $ virtualenv env
+    $ source env/bin/activate
+
+  - Windows 搭建虚拟环境
+    $ # Virtualenv modules installation (Windows based systems)
+    $ virtualenv env
+    $ .\env\Scripts\activate
+
+- 安装依赖
+  $ pip install -r requirements.txt
+
+- 运行后端
+  $ flask run
+
+- 每次启动执行以下操作即可
+  $ cd api
+  $ source env/bin/activate (Unix)
+  $ .\env\Scripts\activate (Windows)
+  $ flask run
+
+#### 前端启动
+
+- 再打开一个新的命令行终端
+- $ cd ui
+- $ npm i # 安装依赖
+- $ npm start # 启动项目
+- 打开浏览器：http://localhost:8000/
+
+- 后端也可以这样启动: npm run start-api
