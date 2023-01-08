@@ -26,14 +26,14 @@
 - 搭建虚拟环境
 
   - Unix 搭建虚拟环境
-    $ # Virtualenv modules installation (Unix based systems)
-    $ virtualenv env
-    $ source env/bin/activate
+  - $ # Virtualenv modules installation (Unix based systems)
+  - $ virtualenv env
+  - $ source env/bin/activate
 
   - Windows 搭建虚拟环境
-    $ # Virtualenv modules installation (Windows based systems)
-    $ virtualenv env
-    $ .\env\Scripts\activate
+  - $ # Virtualenv modules installation (Windows based systems)
+  - $ virtualenv env
+  - $ .\env\Scripts\activate
 
 - 安装依赖
   $ pip install -r requirements.txt
