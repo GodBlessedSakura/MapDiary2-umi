@@ -25,13 +25,11 @@
 - $ cd api
 - 搭建虚拟环境 - Unix
 
-  - $ # Virtualenv modules installation (Unix based systems)
   - $ virtualenv env
   - $ source env/bin/activate
 
 - 搭建虚拟环境 - Windows
 
-  - $ # Virtualenv modules installation (Windows based systems)
   - $ virtualenv env
   - $ .\env\Scripts\activate
 
