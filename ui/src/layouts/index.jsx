@@ -14,7 +14,6 @@ export default function Layout() {
     const response = await request.post('/user/get_info', {
       data: {},
     })
-    console.log('response', response)
     if (response) {
       setUser(response)
       setLocale(localeMapForUmi[response.locale], true)

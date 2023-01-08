@@ -54,7 +54,6 @@ export default function NewDiaryModal(props) {
     const { lng, lat } = position
     const positionStr = `${lng},${lat}`
 
-    console.log('contents', contents)
     const response = await request.post('/user/add_marker', {
       data: {
         id,
@@ -89,6 +88,7 @@ export default function NewDiaryModal(props) {
             onOk={() => createDiary(user, getUserInfo)}
             cancelText={Md2FormatMessage('Cancel')}
             centered
+            closable={false}
             open={showCreateModal}
             onCancel={() => {
               setFileList([]) // 上传的图片列表是受控式表单，手动清除数据
