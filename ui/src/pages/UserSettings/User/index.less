@@ -1,0 +1,41 @@
+.image-wrapper {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  .close {
+    :global {
+      .anticon {
+        display: none;
+        position: absolute;
+        z-index: 1000;
+        top: 5px;
+        right: 5px;
+        color: red;
+        opacity: 0.8;
+        font-size: 15px;
+  
+      }
+  
+  
+    }
+  
+
+  } 
+  &:hover .close {
+    :global {
+      .anticon {
+        display: block;
+  
+      }
+    }
+  }
+
+}
+
+
+
+
+
+
+
+

@@ -14,23 +14,28 @@ const UserSettings = () => {
   const {
     token: { colorBgContainer },
   } = theme.useToken()
-  const menuItems = [
-    {
-      key: '1',
-      icon: <UserOutlined />,
-      label: <Link to="/settings/user">{Md2FormatMessage('UserSettings')}</Link>,
-    },
-    {
-      key: '2',
-      icon: <SettingOutlined />,
-      label: <Link to="/settings/privacy">{Md2FormatMessage('PrivacySettings')}</Link>,
-    },
-    {
-      key: '3',
-      icon: <LockOutlined />,
-      label: <Link to="/settings/admin">{Md2FormatMessage('AdminFunction')}</Link>,
-    },
-  ]
+  const getMenuItems = (user) => {
+    const meuItems = [
+      {
+        key: '1',
+        icon: <UserOutlined />,
+        label: <Link to="/settings/user">{Md2FormatMessage('UserSettings')}</Link>,
+      },
+      {
+        key: '2',
+        icon: <SettingOutlined />,
+        label: <Link to="/settings/privacy">{Md2FormatMessage('PrivacySettings')}</Link>,
+      },
+    ]
+    if (user?.isAdmin) {
+      meuItems.push({
+        key: '3',
+        icon: <LockOutlined />,
+        label: <Link to="/settings/admin">{Md2FormatMessage('AdminFunction')}</Link>,
+      })
+    }
+    return meuItems
+  }
   const logOut = () => {
     clearTokens()
     history.push('/login')
@@ -58,7 +63,7 @@ const UserSettings = () => {
                 >
                   <div className={styles.logo} />
                 </Button>
-                <Menu theme="light" mode="inline" defaultSelectedKeys={getDefaultSelect()} items={menuItems} />
+                <Menu theme="light" mode="inline" defaultSelectedKeys={getDefaultSelect()} items={getMenuItems(user)} />
               </Sider>
               <Layout>
                 <Header

@@ -179,7 +179,13 @@ export default function DiaryModal(props) {
                 </span>
               </div>
             ))}
-            <Upload showUploadList={false} action="" beforeUpload={beforeUpload}>
+            <Upload
+              showUploadList={false}
+              customRequest={(options) => {
+                options.onSuccess()
+              }}
+              beforeUpload={beforeUpload}
+            >
               {fileList.length >= 9 ? null : getUploadButton()}
             </Upload>
           </div>

@@ -1,15 +1,38 @@
-.upload {
-  :global {
-    .ant-upload-wrapper.ant-upload-picture-card-wrapper{
-      .ant-upload-select,.ant-upload-list.ant-upload-list-picture-card .ant-upload-list-item-container {
-        width: 150px;
-        height: 150px;
+.image-wrapper {
+  position: relative;
+  .close {
+    :global {
+      .anticon {
+        display: none;
+        position: absolute;
+        z-index: 100;
+        top: 5px;
+        right: 5px;
+        color: red;
+        opacity: 0.8;
+        font-size: 15px;
+  
       }
+  
+  
+    }
+  
 
-    } 
-    .ant-upload-list {
-      width: 500px;
-
+  } 
+  &:hover .close {
+    :global {
+      .anticon {
+        display: block;
+  
+      }
     }
   }
+
 }
+
+
+
+
+
+
+
