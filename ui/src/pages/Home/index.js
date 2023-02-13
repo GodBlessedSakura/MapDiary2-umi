@@ -1,6 +1,5 @@
 import React from 'react'
 import UAvatar from './UAvatar'
-import withAuth from '@/hocs/withAuth'
 import UserContext from '@/context/user'
 import BaiduMap from './BaiduMap'
 import styles from './index.less'
@@ -19,4 +18,4 @@ const Home = () => {
     </UserContext.Consumer>
   )
 }
-export default withAuth(Home)
+export default Home

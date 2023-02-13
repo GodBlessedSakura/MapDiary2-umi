@@ -23,7 +23,9 @@ export default function Layout() {
     }
   }
   useEffect(() => {
+    // 用户直转登录 / 注册页面
     if (location.pathname.includes('login') || location.pathname.includes('signup')) return
+    // 用户直转业务页面
     getUserInfo()
   }, [])
 
