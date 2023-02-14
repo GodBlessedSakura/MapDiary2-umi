@@ -83,15 +83,12 @@ request.interceptors.request.use((url, options) => {
   let token = null
   // 业务代码需要携带token; 注意新用户直接访问主页需要直接让其跳转至登录 / 注册页
   const { accessToken, refreshToken } = getTokens()
-  console.log('111')
   if (accessToken && refreshToken) {
-    console.log('221')
     const { exp } = jwtDecode(accessToken)
     const curTime = Date.now()
     token = curTime > exp * 1000 ? refreshToken : accessToken
   } else {
     // token 不全，重新登录
-    console.log('233')
     history.push('/login')
   }
   return {
