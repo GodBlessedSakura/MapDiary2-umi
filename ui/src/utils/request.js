@@ -95,9 +95,11 @@ request.interceptors.request.use((url, options) => {
     url,
     options: {
       ...options,
-      headers: {
-        Authorization: token ? `Bearer ${token}` : null,
-      },
+      headers: token
+        ? {
+            Authorization: `Bearer ${token}`,
+          }
+        : null,
     },
   }
 })
