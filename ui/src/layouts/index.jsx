@@ -1,4 +1,4 @@
-import { Outlet, setLocale } from 'umi'
+import { Outlet, setLocale, history } from 'umi'
 import { useState, useEffect } from 'react'
 import { message } from 'antd'
 import request from '@/utils/request'
@@ -6,6 +6,7 @@ import UserContext from '@/context/user'
 import { localeMapForEditor, localeMapForUmi } from '@/locales/map'
 import { i18nChangeLanguage } from '@wangeditor/editor'
 import { Md2FormatMessage } from '@/utils/locale'
+import { getTokens } from '@/utils/token'
 import styles from './index.less'
 
 export default function Layout() {
@@ -26,6 +27,8 @@ export default function Layout() {
     // 用户直转登录 / 注册页面
     if (location.pathname.includes('login') || location.pathname.includes('signup')) return
     // 用户直转业务页面
+    const { accessToken, refreshToken } = getTokens()
+    if (!accessToken || !refreshToken) return history.push('/login')
     getUserInfo()
   }, [])
 
