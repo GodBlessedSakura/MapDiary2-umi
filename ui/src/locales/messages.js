@@ -15,7 +15,7 @@ const messages = {
   ConfirmPasswordEmptyError: ['密码不能为空', 'The password cannot be empty'],
   SignUp: ['注册', 'Sign Up'],
   SignIn: ['登录', 'Sign In'],
-  HaveAccount: ['已有账户？', 'Already have an account?'],
+  HaveAccount: ['已有账户？', 'Got account?'],
   UsernameError: ['用户名已存在', 'Username existed'],
   EmailError: ['邮箱已存在', 'Email existed'],
   PasswordError: ['密码长度不合法', 'Invalid password length'],

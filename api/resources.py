@@ -34,6 +34,7 @@ class UserRegistration(Resource):
         parser.add_argument('email',
                             help='This field cannot be blank',
                             required=True)
+        parser.add_argument('locale')
 
         data = parser.parse_args()
 
@@ -52,7 +53,8 @@ class UserRegistration(Resource):
         new_user = UserModel(username=data['username'],
                              email=data['email'],
                              password=UserModel.generate_hash(
-                                 data['password']))
+                                 data['password']),
+                             locale=data['locale'])
         try:
             new_user.save_to_db()
             # 无论是登录或者注册成功，都生成access_token和refresh_token

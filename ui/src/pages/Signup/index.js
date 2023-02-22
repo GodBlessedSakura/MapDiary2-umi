@@ -1,8 +1,9 @@
 import React, { useContext } from 'react'
-import { Link, history } from 'umi'
-import { Form, Input, Button, message } from 'antd'
+import { Link, history, setLocale, getLocale } from 'umi'
+import { Form, Input, Button, message, Space } from 'antd'
 import request from '@/utils/request'
 import { Md2FormatMessage } from '@/utils/locale'
+import { localeMapForUmi } from '@/locales/map'
 import UserContext from '@/context/user'
 import styles from './index.less'
 
@@ -12,11 +13,20 @@ const Signup = () => {
   const handleSubmitForm = async () => {
     const values = await signupForm.validateFields()
     const { username, email, password } = values
+    let locale = null
+    const curLocaleVal = getLocale()
+    for (const key in localeMapForUmi) {
+      if (localeMapForUmi[key] === curLocaleVal) {
+        locale = key
+        break
+      }
+    }
     const response = await request.post('/registration', {
       data: {
         username,
         email,
         password,
+        locale,
       },
     })
 
@@ -119,12 +129,23 @@ const Signup = () => {
                 {Md2FormatMessage('SignUp')}
               </Button>
             </Form.Item>
-            <p>
-              {Md2FormatMessage('HaveAccount')}
-              <Link to="/login">
-                <span className={styles.bald}>&nbsp;&nbsp;&nbsp;{Md2FormatMessage('SignIn')}</span>
-              </Link>
-            </p>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <div>
+                {Md2FormatMessage('HaveAccount')}
+                <Link to="/login">
+                  <span className={styles.bald}>&nbsp;&nbsp;&nbsp;{Md2FormatMessage('SignIn')}</span>
+                </Link>
+              </div>
+              <div className={styles.locale}>
+                <Button size="small" type="link" onClick={() => setLocale(localeMapForUmi['EN'])}>
+                  Eng
+                </Button>
+                |
+                <Button size="small" type="link" onClick={() => setLocale(localeMapForUmi['CN'])}>
+                  中文
+                </Button>
+              </div>
+            </div>
           </Form>
         </div>
       </div>

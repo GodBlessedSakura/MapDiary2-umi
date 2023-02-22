@@ -1,7 +1,8 @@
 import React, { useContext } from 'react'
 import { Input, Form, Button, Switch } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
-import { Link, history } from 'umi'
+import { Link, history, setLocale } from 'umi'
+import { localeMapForUmi } from '@/locales/map'
 import UserContext from '@/context/user'
 import request from '@/utils/request'
 import styles from './index.less'
@@ -66,9 +67,20 @@ export default function Login() {
           </Form.Item>
           <div className={styles.bottom}>
             <Form.Item>
-              <div>
-                {Md2FormatMessage('NoAccount')}&nbsp;
-                <Link to="/signup">{Md2FormatMessage('SignUp')}</Link>
+              <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                <div>
+                  {Md2FormatMessage('NoAccount')}&nbsp;
+                  <Link to="/signup">{Md2FormatMessage('SignUp')}</Link>
+                </div>
+                <div className={styles.locale}>
+                  <Button size="small" type="link" onClick={() => setLocale(localeMapForUmi['EN'])}>
+                    Eng
+                  </Button>
+                  |
+                  <Button size="small" type="link" onClick={() => setLocale(localeMapForUmi['CN'])}>
+                    中文
+                  </Button>
+                </div>
               </div>
             </Form.Item>
           </div>
