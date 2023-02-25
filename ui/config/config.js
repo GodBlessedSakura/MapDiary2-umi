@@ -10,7 +10,7 @@ export default defineConfig({
     default: 'zh-CN',
     baseSeparator: '-',
   },
-  favicons: ['/favicon.ico'],
+  favicons: ['http://bluerosefantasy.com/map/favicon.ico'], // publicPath只对css, js生效，对 favicon 不生效
   plugins,
   proxy: {
     '/api': {
@@ -30,5 +30,4 @@ export default defineConfig({
   },
   base: '/map', // 部署HTML到非根目录
   publicPath: 'http://bluerosefantasy.com/map/',
-  favicon: 'http://bluerosefantasy.com/map/favicon.ico', // publicPath只对css, js生效，对 favicon 不生效
 })
