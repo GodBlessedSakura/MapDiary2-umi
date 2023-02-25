@@ -1,9 +1,10 @@
 {
   "private": true,
+  "homepage": ".",
   "author": "Zhang Lin <1306562902@qq.com>",
   "scripts": {
-    "dev": "umi dev",
     "build": "umi build",
+    "dev": "umi dev",
     "postinstall": "umi setup",
     "setup": "umi setup",
     "start": "npm run dev",
