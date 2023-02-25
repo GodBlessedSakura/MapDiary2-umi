@@ -28,4 +28,5 @@ export default defineConfig({
       },
     },
   },
+  base: '/map', // 部署HTML到非根目录
 })
