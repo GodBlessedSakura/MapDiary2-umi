@@ -21,6 +21,12 @@ export default function Admin() {
     }
   }
 
+  const getTitle = (username, email, isAdmin) => {
+    let res = `${username} (${email})`
+    if (isAdmin) res += '(Admin)'
+    return res
+  }
+
   const handleBanOrEnable = async (id, action) => {
     const response = await request.post('/user/ban_or_enable', {
       data: {
@@ -73,7 +79,7 @@ export default function Admin() {
     ]
     return (
       <List.Item actions={renderActions()}>
-        <List.Item.Meta avatar={<Avatar src={avatar} icon={<UserOutlined />} />} title={`${username} (${email})` + isAdmin?'(Admin)':''} description={`${markers.length}${Md2FormatMessage('XDiary')}`} />
+        <List.Item.Meta avatar={<Avatar src={avatar} icon={<UserOutlined />} />} title={getTitle(username,email,isAdmin)} description={`${markers.length}${Md2FormatMessage('XDiary')}`} />
       </List.Item>
     )
   }
