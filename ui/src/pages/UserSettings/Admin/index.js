@@ -73,7 +73,7 @@ export default function Admin() {
     ]
     return (
       <List.Item actions={renderActions()}>
-        <List.Item.Meta avatar={<Avatar src={avatar} icon={<UserOutlined />} />} title={`${username} (${email})`} description={`${markers.length}${Md2FormatMessage('XDiary')}`} />
+        <List.Item.Meta avatar={<Avatar src={avatar} icon={<UserOutlined />} />} title={`${username} (${email})` + isAdmin?'(Admin)':''} description={`${markers.length}${Md2FormatMessage('XDiary')}`} />
       </List.Item>
     )
   }

@@ -92,9 +92,9 @@ class UserLogin(Resource):
             return {
                 'message': 'User {} has been banned'.format(data['username'])
             }, 401
-        if current_user.username in ['Zhang Lin', 'Jiayin Zhu']:
-            current_user.is_admin = True
-            current_user.save_to_db()
+        # if current_user.username in ['Zhang Lin', 'Jiayin Zhu']:
+        #     current_user.is_admin = True
+        #     current_user.save_to_db()
 
         if UserModel.verify_hash(data['password'], current_user.password):
             access_token = create_access_token(identity=data['username'])
