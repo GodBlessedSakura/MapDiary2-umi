@@ -1,72 +1,117 @@
-import React, { useContext, useEffect, useState } from 'react'
-import request from '@/utils/request'
-import UserContext from '@/context/user'
-import { getBase64Url } from '@/utils/functions'
-import { Button, Modal, Typography, Image, message, Spin, Space, Form, Input, Upload } from 'antd'
-import { CloseCircleOutlined, PlusOutlined } from '@ant-design/icons'
-import styles from './index.less'
-import { Md2FormatMessage } from '@/utils/locale'
-import MyEditor from '../MyEditor'
+import React, {
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import request from "@/utils/request";
+import UserContext from "@/context/user";
+import { getBase64Url } from "@/utils/functions";
+import {
+  Button,
+  Modal,
+  Typography,
+  Image,
+  message,
+  Spin,
+  Space,
+  Form,
+  Input,
+  Upload,
+} from "antd";
+import {
+  CloseCircleOutlined,
+  PlusOutlined,
+  LoadingOutlined,
+} from "@ant-design/icons";
+import styles from "./index.less";
+import { Md2FormatMessage } from "@/utils/locale";
+import MyEditor from "../MyEditor";
 
 export default function DiaryModal(props) {
-  const { diary, showDiaryModal, onChangeShowModal, onAdminEdit } = props
-  if (!diary) return
+  const {
+    diary,
+    showDiaryModal,
+    onChangeShowModal,
+    onAdminEdit,
+  } = props;
+  if (!diary) return;
 
-  const [images, setImages] = useState([])
-  const [loading, setLoading] = useState(false)
-  const [editing, setEditing] = useState(false)
-  const [fileList, setFileList] = useState([])
-  const [contents, setContents] = useState('')
-  const [form] = Form.useForm()
+  const [images, setImages] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [fileList, setFileList] = useState([]);
+  const [contents, setContents] = useState("");
+  const [isUploading, setUploading] =
+    useState(false);
+  const [form] = Form.useForm();
 
-  const context = useContext(UserContext)
-  const [user, getUserInfo] = context
-  const { id, title, text, owner } = diary
+  const context = useContext(UserContext);
+  const [user, getUserInfo] = context;
+  const { id, title, text, owner } = diary;
   const calculateHeight = (images) => {
-    if (!images.length) return 0
-    return Math.ceil(images.length / 3) * 200 + 40
-  }
-  const calculateHeightWithUploader = (fileList, maxNum) => {
-    return fileList.length === maxNum ? Math.ceil(fileList.length / 3) * 200 + 40 : Math.ceil((fileList.length + 1) / 3) * 200 + 40
-  }
+    if (!images.length) return 0;
+    return (
+      Math.ceil(images.length / 3) * 200 + 40
+    );
+  };
+  const calculateHeightWithUploader = (
+    fileList,
+    maxNum
+  ) => {
+    return fileList.length === maxNum
+      ? Math.ceil(fileList.length / 3) * 200 + 40
+      : Math.ceil((fileList.length + 1) / 3) *
+          200 +
+          40;
+  };
 
   const getImages = async () => {
-    setLoading(true)
-    const response = await request.post('/user/get_images', {
-      data: {
-        id,
-      },
-    })
+    setLoading(true);
+    const response = await request.post(
+      "/user/get_images",
+      {
+        data: {
+          id,
+        },
+      }
+    );
     if (response.images) {
-      setLoading(false)
-      setImages(response.images)
+      setLoading(false);
+      setImages(response.images);
     } else {
-      message.error('获取图片失败')
+      message.error("获取图片失败");
     }
-  }
+  };
 
   const handleDeleteDiary = async () => {
-    const response = await request.post('/user/remove_marker', {
-      data: {
-        id,
-      },
-    })
+    const response = await request.post(
+      "/user/remove_marker",
+      {
+        data: {
+          id,
+        },
+      }
+    );
     if (response.id) {
-      onChangeShowModal(false)
-      message.success(Md2FormatMessage('DeleteDiarySuccess'))
-      getUserInfo()
-      onAdminEdit && onAdminEdit()
+      onChangeShowModal(false);
+      message.success(
+        Md2FormatMessage("DeleteDiarySuccess")
+      );
+      getUserInfo();
+      onAdminEdit && onAdminEdit();
     } else {
-      message.error(Md2FormatMessage('DeleteDiaryFailed'))
+      message.error(
+        Md2FormatMessage("DeleteDiaryFailed")
+      );
     }
-  }
+  };
 
   const handleEditDiary = () => {
-    onChangeShowModal(false)
-    setFileList(images)
-    setContents(text)
-    setEditing(true)
-  }
+    onChangeShowModal(false);
+    setFileList(images);
+    setContents(text);
+    setEditing(true);
+  };
   const getUploadButton = () => (
     <Button style={{ width: 200, height: 200 }}>
       <PlusOutlined />
@@ -75,98 +120,155 @@ export default function DiaryModal(props) {
           marginTop: 8,
         }}
       >
-        {Md2FormatMessage('Upload')}
+        {Md2FormatMessage("Upload")}
       </div>
     </Button>
-  )
+  );
   const beforeUpload = async (file) => {
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
+    const isJpgOrPng =
+      file.type === "image/jpeg" ||
+      file.type === "image/png";
     if (!isJpgOrPng) {
-      message.error(Md2FormatMessage('JPGorPNG'))
-      return Upload.LIST_IGNORE
+      message.error(Md2FormatMessage("JPGorPNG"));
+      return Upload.LIST_IGNORE;
     }
-    const newFileBase64Url = await getBase64Url(file)
-    setFileList([...fileList, newFileBase64Url])
-  }
+    const newFileBase64Url = await getBase64Url(
+      file
+    );
+    setFileList([...fileList, newFileBase64Url]);
+  };
   const removeUploadImg = (idx) => {
-    setFileList(fileList.filter((file, fileIdx) => fileIdx !== idx))
-  }
+    setFileList(
+      fileList.filter(
+        (file, fileIdx) => fileIdx !== idx
+      )
+    );
+  };
   const handleUpdateDairy = async () => {
-    const values = await form.validateFields()
-    const response = await request.post('/user/update_marker', {
-      data: {
-        id,
-        text: contents,
-        title: values.title,
-        images: fileList,
-      },
-    })
+    if (isUploading) return;
+    const values = await form.validateFields();
+    setUploading(true);
+    const response = await request.post(
+      "/user/update_marker",
+      {
+        data: {
+          id,
+          text: contents,
+          title: values.title,
+          images: fileList,
+        },
+      }
+    );
     if (response.id) {
-      message.success(Md2FormatMessage('UpdateDiarySuccess'))
-      setFileList([])
-      setContents('')
-      setEditing(false)
-      getUserInfo()
-      onAdminEdit && onAdminEdit()
+      message.success(
+        Md2FormatMessage("UpdateDiarySuccess")
+      );
+      setFileList([]);
+      setContents("");
+      setEditing(false);
+      getUserInfo();
+      onAdminEdit && onAdminEdit();
     } else {
-      message.error(Md2FormatMessage('UpdateDiaryFailed'))
+      message.error(
+        Md2FormatMessage("UpdateDiaryFailed")
+      );
     }
-  }
+    setUploading(false);
+  };
   useEffect(() => {
-    !editing && getImages()
-  }, [id, editing])
+    !editing && getImages();
+  }, [id, editing]);
   return editing ? (
     <div>
       <Modal
         destroyOnClose={true}
-        bodyStyle={{ overflow: 'auto', height: 600 }}
+        bodyStyle={{
+          overflow: "auto",
+          height: 600,
+        }}
         width={1000}
-        title={<h2>{Md2FormatMessage('EditDiary')}</h2>}
-        okText={Md2FormatMessage('Update')}
+        title={
+          <h2>{Md2FormatMessage("EditDiary")}</h2>
+        }
+        okText={
+          isUploading ? (
+            <Spin
+              indicator={
+                <LoadingOutlined
+                  style={{ color: "white" }}
+                  spin
+                />
+              }
+            />
+          ) : (
+            Md2FormatMessage("Update")
+          )
+        }
         onOk={handleUpdateDairy}
-        cancelText={Md2FormatMessage('Cancel')}
+        cancelText={Md2FormatMessage("Cancel")}
         centered
         open={editing}
         onCancel={() => {
-          setFileList([]) // 上传的图片列表是受控式表单，手动清除数据
-          setContents('')
-          setEditing(false)
+          setFileList([]); // 上传的图片列表是受控式表单，手动清除数据
+          setContents("");
+          setEditing(false);
         }}
       >
-        <Form preserve={false} form={form} style={{ marginTop: 20 }}>
-          <h3>{Md2FormatMessage('Title')}</h3>
-          <Form.Item name="title" style={{ width: 300, marginTop: 10 }} initialValue={title}>
+        <Form
+          preserve={false}
+          form={form}
+          style={{ marginTop: 20 }}
+        >
+          <h3>{Md2FormatMessage("Title")}</h3>
+          <Form.Item
+            name="title"
+            style={{ width: 300, marginTop: 10 }}
+            initialValue={title}
+          >
             <Input
-              placeholder={Md2FormatMessage('TitleInput')}
+              placeholder={Md2FormatMessage(
+                "TitleInput"
+              )}
               maxLength={30}
               rules={[
                 {
                   required: true,
                   whitespace: true,
-                  message: Md2FormatMessage('TitleInputError'),
+                  message: Md2FormatMessage(
+                    "TitleInputError"
+                  ),
                 },
               ]}
             />
           </Form.Item>
-          <h3>{Md2FormatMessage('Photos')}</h3>
+          <h3>{Md2FormatMessage("Photos")}</h3>
 
           <div
             style={{
-              display: 'grid',
+              display: "grid",
               rowGap: 10,
               columnGap: 10,
-              gridTemplateColumns: '200px 200px 200px',
-              gridTemplateRows: '200px 200px 200px',
+              gridTemplateColumns:
+                "200px 200px 200px",
+              gridTemplateRows:
+                "200px 200px 200px",
               marginTop: 10,
               width: 640,
-              height: calculateHeightWithUploader(fileList, 9),
+              height: calculateHeightWithUploader(
+                fileList,
+                9
+              ),
             }}
           >
             {fileList.map((imageUrl, idx) => (
-              <div className={styles['image-wrapper']}>
+              <div
+                className={
+                  styles["image-wrapper"]
+                }
+              >
                 <Image
                   style={{
-                    objectFit: 'cover',
+                    objectFit: "cover",
                   }}
                   width={200}
                   height={200}
@@ -175,23 +277,32 @@ export default function DiaryModal(props) {
                 />
 
                 <span className={styles.close}>
-                  <CloseCircleOutlined onClick={() => removeUploadImg(idx)} />
+                  <CloseCircleOutlined
+                    onClick={() =>
+                      removeUploadImg(idx)
+                    }
+                  />
                 </span>
               </div>
             ))}
             <Upload
               showUploadList={false}
               customRequest={(options) => {
-                options.onSuccess()
+                options.onSuccess();
               }}
               beforeUpload={beforeUpload}
             >
-              {fileList.length >= 9 ? null : getUploadButton()}
+              {fileList.length >= 9
+                ? null
+                : getUploadButton()}
             </Upload>
           </div>
 
-          <h3>{Md2FormatMessage('Thoughts')}</h3>
-          <MyEditor contents={contents} onContentsChange={setContents} />
+          <h3>{Md2FormatMessage("Thoughts")}</h3>
+          <MyEditor
+            contents={contents}
+            onContentsChange={setContents}
+          />
         </Form>
       </Modal>
     </div>
@@ -199,21 +310,29 @@ export default function DiaryModal(props) {
     <div>
       <Modal
         open={showDiaryModal}
-        bodyStyle={{ overflow: 'auto', height: 600 }}
+        bodyStyle={{
+          overflow: "auto",
+          height: 600,
+        }}
         destroyOnClose={true}
         width={1000}
         title={<h2>{title}</h2>}
         centered
         onCancel={() => {
-          onChangeShowModal(false)
+          onChangeShowModal(false);
         }}
         footer={
           <Space>
             {owner && (
               <>
-                <Button onClick={handleEditDiary}>{Md2FormatMessage('Edit')}</Button>
-                <Button danger onClick={handleDeleteDiary}>
-                  {Md2FormatMessage('Delete')}
+                <Button onClick={handleEditDiary}>
+                  {Md2FormatMessage("Edit")}
+                </Button>
+                <Button
+                  danger
+                  onClick={handleDeleteDiary}
+                >
+                  {Md2FormatMessage("Delete")}
                 </Button>
               </>
             )}
@@ -221,25 +340,34 @@ export default function DiaryModal(props) {
             <Button
               type="primary"
               onClick={() => {
-                onChangeShowModal(false)
+                onChangeShowModal(false);
               }}
             >
-              {Md2FormatMessage('Close')}
+              {Md2FormatMessage("Close")}
             </Button>
           </Space>
         }
       >
         {loading ? (
-          <Spin tip={Md2FormatMessage('ContentLoading')} spinning={loading} size="large" style={{ width: 640, marginTop: 200 }} />
+          <Spin
+            tip={Md2FormatMessage(
+              "ContentLoading"
+            )}
+            spinning={loading}
+            size="large"
+            style={{ width: 640, marginTop: 200 }}
+          />
         ) : (
           <>
             <div
               style={{
-                display: 'grid',
+                display: "grid",
                 rowGap: 10,
                 columnGap: 10,
-                gridTemplateColumns: '200px 200px 200px',
-                gridTemplateRows: '200px 200px 200px',
+                gridTemplateColumns:
+                  "200px 200px 200px",
+                gridTemplateRows:
+                  "200px 200px 200px",
                 marginTop: 40,
                 width: 640,
                 height: calculateHeight(images),
@@ -249,7 +377,7 @@ export default function DiaryModal(props) {
                 <Image
                   key={idx}
                   style={{
-                    objectFit: 'cover',
+                    objectFit: "cover",
                   }}
                   width={200}
                   height={200}
@@ -258,10 +386,13 @@ export default function DiaryModal(props) {
                 />
               ))}
             </div>
-            <MyEditor contents={text} readOnly={true} />
+            <MyEditor
+              contents={text}
+              readOnly={true}
+            />
           </>
         )}
       </Modal>
     </div>
-  )
+  );
 }
